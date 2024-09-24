@@ -4,14 +4,13 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-const ChangeTaskInfosModal = ({ isVisible, onClose }) => {
+const ChangeTaskInfosModal = ({ isVisible, onClose, onDateChange }) => {
     if (!isVisible) return null;
   
     const handleCloseClick = (e: Event) => {
       e.stopPropagation();
       onClose();
     };
-    const setDate = (newDate) => {}
 
     return (
         <div className="modal right-[60px]" onClick={handleCloseClick}>
@@ -20,7 +19,7 @@ const ChangeTaskInfosModal = ({ isVisible, onClose }) => {
                 &times;
             </button>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateCalendar views={['year', 'month', 'day']} onChange={(newValue) => setDate(newValue)}/>
+                <DateCalendar views={['year', 'month', 'day']} onChange={onDateChange}/>
             </LocalizationProvider>
             </div>
         </div>

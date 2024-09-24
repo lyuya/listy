@@ -1,8 +1,8 @@
-import Image from "next/image";
 import localFont from "next/font/local";
 import { Task } from "./types/task";
 import React, { useState } from 'react';
 import ChangeTaskInfosModal from "./components/ChangeTaskInfosModal";
+import { Dayjs } from "dayjs";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -40,6 +40,7 @@ const tasks: Task[] = [
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [date, setDate] = useState<Date>(new Date());
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -48,19 +49,24 @@ export default function Home() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+  const onDateChange = (newDate: Dayjs) => {
+    console.log(newDate.toDate())
+    setDate(newDate.toDate())
+  }
+
   return (
     <>
         <header>
           <div className="inline-flex w-full justify-between px-8">
             <div className="text-2xl p-5">
               <span className="text-matcha px-2">&#10094;</span>
-              {tasks[0].created_date.toLocaleString('default', { month: 'long' })}
-              <span className="text-matcha px-2">{tasks[0].created_date.getFullYear()}</span>
+              {date.toLocaleString('default', { month: 'long' })}
+              <span className="text-matcha px-2">{date.getFullYear()}</span>
               <span className="text-matcha pr-2">&#10095;</span>
             </div>
             <div className="m-4"><button onClick={openModal}><img className="h-8 w-8" src="schedule.png"></img></button></div>
-            <ChangeTaskInfosModal isVisible={isModalOpen} onClose={closeModal}>
-            </ChangeTaskInfosModal>
+            <ChangeTaskInfosModal isVisible={isModalOpen} onClose={closeModal} onDateChange={onDateChange} />
           </div>
         </header>
         <div className="p-4">
