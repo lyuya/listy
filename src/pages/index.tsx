@@ -1,6 +1,8 @@
 import Image from "next/image";
 import localFont from "next/font/local";
 import { Task } from "./types/task";
+import React, { useState } from 'react';
+import ChangeTaskInfosModal from "./components/ChangeTaskInfosModal";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,7 +37,17 @@ const tasks: Task[] = [
     finished_date: new Date('2024-09-15T17:34:00'),
   }
 ];
+
 export default function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <>
         <header>
@@ -46,7 +58,9 @@ export default function Home() {
               <span className="text-matcha px-2">{tasks[0].created_date.getFullYear()}</span>
               <span className="text-matcha pr-2">&#10095;</span>
             </div>
-            <div className="m-4"><button><img className="h-8 w-8" src="schedule.png"></img></button></div>
+            <div className="m-4"><button onClick={openModal}><img className="h-8 w-8" src="schedule.png"></img></button></div>
+            <ChangeTaskInfosModal isVisible={isModalOpen} onClose={closeModal}>
+            </ChangeTaskInfosModal>
           </div>
         </header>
         <div className="p-4">
@@ -85,6 +99,5 @@ export default function Home() {
           </div>
         </footer>
     </>
-
   );
 }
