@@ -21,6 +21,14 @@ const config: Config = {
       'md': '0.375rem',
       'lg': '1rem',
       'full': '9999px',
+    },
+    divideWidth: {
+      DEFAULT: '1px',
+      '0': '0',
+      '2': '2px',
+      '3': '3px',
+      '4': '4px',
+      '6': '6px',
     }
   },
   plugins: [],

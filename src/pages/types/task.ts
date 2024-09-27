@@ -1,8 +1,10 @@
 export interface Task {
     name: string,
-    created_date: Date,
-    finished_date?: Date,
+    start_time: Date,
+    finished_time: Date,
     duration_hour: number,
     duration_minute: number,
-    task_cloned?: boolean,
+    description: string,
+    checked: boolean,
+    subtasks: [],
 }
