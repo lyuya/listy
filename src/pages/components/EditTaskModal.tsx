@@ -5,8 +5,15 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import dayjs from 'dayjs';
 import { customDatePicker, customDigitalClockSectionItem } from './CustomStyle';
+import { Task } from '../types/task';
 
-export default function EditTaskModal({isVisible, value, onClose}){
+interface EditTaskModalProps {
+    isVisible: boolean;
+    value: Task;
+    onClose: () => {}
+}
+
+export default function EditTaskModal({isVisible, value, onClose}: EditTaskModalProps){
     if (!isVisible) return null;
     const color = "#426B1F";
     return (

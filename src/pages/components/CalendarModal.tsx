@@ -5,7 +5,14 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { customDatePicker } from './CustomStyle';
 
-const CalendarModal = ({ isVisible, onClose, defaultDate, onDateChange }) => {
+interface CalendarModalProps {
+    isVisible: boolean;
+    onClose: () => {};
+    defaultDate: Date;
+    onDateChange: () => {}
+}
+
+const CalendarModal = ({ isVisible, onClose, defaultDate, onDateChange }: CalendarModalProps) => {
     if (!isVisible) return null;
     const handleCloseClick = (e: Event) => {
       e.stopPropagation();
