@@ -6,16 +6,17 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import dayjs from 'dayjs';
 import { customDatePicker, customDigitalClockSectionItem } from './CustomStyle';
 import { Task } from '../types/task';
+import { useMemo } from 'react';
 
 interface EditTaskModalProps {
-    isVisible: boolean;
     value: Task;
     onClose: () => {}
 }
 
-export default function EditTaskModal({isVisible, value, onClose}: EditTaskModalProps){
-    if (!isVisible) return null;
-    const color = "#426B1F";
+export default function EditTaskModal({ value, onClose }: EditTaskModalProps){
+    const startDate = useMemo(() => dayjs(value.start_time), [value.start_time])
+    const finishedDate = useMemo(() => dayjs(value.finished_time), [value.finished_time])
+
     return (
         <>
             <div className="modal-backdrop" onClick={(e) => {
@@ -36,10 +37,10 @@ export default function EditTaskModal({isVisible, value, onClose}: EditTaskModal
                         <div className="inline-flex gap-1 pb-2">
                             <>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker value={dayjs(value.start_time)} slotProps={{ ...customDatePicker, textField: { size: 'small'}}}/>
-                                    <TimePicker value={dayjs(value.start_time)} slotProps={{ textField: { size: 'small' }, actionBar: { actions: [] }}}/>
+                                    <DatePicker value={startDate} slotProps={{ ...customDatePicker, textField: { size: 'small'}}}/>
+                                    <TimePicker value={startDate} slotProps={{ textField: { size: 'small' }, actionBar: { actions: [] }}}/>
                                     <div className="my-auto"><ArrowForwardIcon></ArrowForwardIcon></div>
-                                    <TimePicker value={dayjs(value.finished_time)} slotProps={{ textField: { size: 'small' }, actionBar: { actions: [] }, digitalClockSectionItem: { ...customDigitalClockSectionItem }}}/>
+                                    <TimePicker value={finishedDate} slotProps={{ textField: { size: 'small' }, actionBar: { actions: [] }, digitalClockSectionItem: { ...customDigitalClockSectionItem }}}/>
                                 </LocalizationProvider>
                             </>
                         </div>

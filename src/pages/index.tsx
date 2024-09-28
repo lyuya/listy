@@ -87,7 +87,6 @@ export default function Home() {
   };
 
   const onDateChange = (newDate: Dayjs) => {
-    console.log(newDate.toDate())
     setDate(newDate.toDate())
   }
 
@@ -104,7 +103,7 @@ export default function Home() {
               <button className="text-matcha pr-2" onClick={addOneDay}>&#10095;</button>
             </div>
             <div className="m-4"><button onClick={openCalendarModal}><img className="h-8 w-8" src="schedule.png"></img></button></div>
-            <CalendarModal defaultDate={date} isVisible={isCalendarOpen} onClose={closeCalendarModal} onDateChange={onDateChange} />
+            {isCalendarOpen && <CalendarModal defaultDate={date} onClose={closeCalendarModal} onDateChange={onDateChange} />}
           </div>
         </header>
         <div className="p-4">
@@ -141,7 +140,7 @@ export default function Home() {
           <div className="px-8 float-right	">
             <button className="bg-lime-800 rounded-full text-white py-2 px-4" onClick={openEditTaskModal}>+</button>
           </div>
-          <EditTaskModal isVisible={isEditTaskOpen} onClose={closeEditTaskModal} value={task}></EditTaskModal>
+          {isEditTaskOpen && <EditTaskModal onClose={closeEditTaskModal} value={task}></EditTaskModal>}
         </footer>
     </>
   );

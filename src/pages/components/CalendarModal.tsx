@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -6,22 +6,22 @@ import dayjs from 'dayjs';
 import { customDatePicker } from './CustomStyle';
 
 interface CalendarModalProps {
-    isVisible: boolean;
     onClose: () => {};
     defaultDate: Date;
     onDateChange: () => {}
 }
 
-const CalendarModal = ({ isVisible, onClose, defaultDate, onDateChange }: CalendarModalProps) => {
-    if (!isVisible) return null;
-    const handleCloseClick = (e: Event) => {
-      e.stopPropagation();
-      onClose();
+const CalendarModal = ({ onClose, defaultDate, onDateChange }: CalendarModalProps) => {
+    const handleCloseClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.stopPropagation();
+        onClose();
     };
-    let _defaultDate=dayjs(defaultDate);
+
+    const _defaultDate = useMemo(() => dayjs(defaultDate), [defaultDate])
+
     return (
         <div className="modal right-[60px]" onClick={handleCloseClick}>
-            <div className="modal-content bg-white" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content bg-white" onClick={(event) => event.stopPropagation()}>
             <button className="modal-close" onClick={onClose}>
                 &times;
             </button>
@@ -32,4 +32,5 @@ const CalendarModal = ({ isVisible, onClose, defaultDate, onDateChange }: Calend
         </div>
     );
   };
+
 export default CalendarModal;
