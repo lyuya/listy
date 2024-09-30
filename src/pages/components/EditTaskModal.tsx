@@ -5,20 +5,87 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import dayjs from "dayjs";
 import { customDatePicker, customDigitalClockSectionItem } from "./CustomStyle";
-import { Task } from "../types/task";
-import { useMemo } from "react";
+import { Subtask, Task } from "../types/task";
+import { ChangeEvent, useMemo, useState } from "react";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { updateTask } from "../api/task.service";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 
 interface EditTaskModalProps {
-  value: Task;
+  task: Task;
   onClose: () => {};
 }
 
-export default function EditTaskModal({ value, onClose }: EditTaskModalProps) {
-  const startDate = useMemo(() => dayjs(value.start_time), [value.start_time]);
+export default function EditTaskModal({
+  task: initialTask,
+  onClose,
+}: EditTaskModalProps) {
+  let [task, setTask] = useState({ ...initialTask });
+  let [checked, setChecked] = useState(initialTask.checked);
+
+  const startDate = useMemo(() => dayjs(task.start_time), [task.start_time]);
   const finishedDate = useMemo(
-    () => dayjs(value.finished_time),
-    [value.finished_time],
+    () => dayjs(task.finished_time),
+    [task.finished_time],
   );
+  const saveNewTask = (taskEdited: Task) => {
+    updateTask(taskEdited);
+    onClose();
+  };
+  const createNewSubtask = () => {
+    let newSubtask: Subtask = {
+      name: "",
+      checked: false,
+    };
+
+    setTask({ ...task, subtasks: [...task.subtasks, newSubtask] });
+  };
+
+  const setSubtaskName = (e: ChangeEvent<HTMLInputElement>, i: number) => {
+    const subtask = {
+      ...task.subtasks[i],
+      name: e.target.value,
+    };
+    const taskCloned = { ...task };
+    taskCloned.subtasks[i] = subtask;
+    setTask(taskCloned);
+  };
+
+  const setSubtaskChecked = (e: ChangeEvent<HTMLInputElement>, i: number) => {
+    const subtask = {
+      ...task.subtasks[i],
+      checked: e.target.checked,
+    };
+    const taskCloned = { ...task };
+    taskCloned.subtasks[i] = subtask;
+    setTask(taskCloned);
+  };
+
+  const deleteSubtask = (i: number) => {
+    const taskCloned = { ...task };
+    taskCloned.subtasks.splice(i, 1);
+    setTask(taskCloned);
+  };
+
+  const setDescription = (description: string) => {
+    const taskCloned = { ...task };
+    taskCloned.description = description;
+    setTask(taskCloned);
+  };
+
+  const setTaskName = (name: string) => {
+    const taskCloned = { ...task };
+    taskCloned.name = name;
+    setTask(taskCloned);
+  };
+
+  const setTaskChecked = () => {
+    const taskCloned = { ...initialTask };
+    taskCloned.checked = !taskCloned.checked;
+    setChecked(taskCloned.checked);
+    updateTask(taskCloned);
+  };
 
   return (
     <>
@@ -44,7 +111,8 @@ export default function EditTaskModal({ value, onClose }: EditTaskModalProps) {
               <input
                 className="appearance-none border-2 border-gray-200 rounded-md w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white"
                 placeholder="Task name"
-                defaultValue={value.name}
+                value={task.name}
+                onChange={(e) => setTaskName(e.target.value)}
               ></input>
             </div>
             <div className="inline-flex gap-1 pb-2">
@@ -82,11 +150,11 @@ export default function EditTaskModal({ value, onClose }: EditTaskModalProps) {
             </div>
             <div>
               <div>
-                {value.finished_time ? (
+                {task.finished_time ? (
                   <p className="text-sm text-gray-500	">
                     Duration:{" "}
-                    {(value.finished_time.getTime() -
-                      value.start_time.getTime()) /
+                    {(task.finished_time.getTime() -
+                      task.start_time.getTime()) /
                       60000}
                   </p>
                 ) : (
@@ -97,30 +165,88 @@ export default function EditTaskModal({ value, onClose }: EditTaskModalProps) {
               </div>
             </div>
             <div className="min-h-40 grid grid-cols-2 divide-x divide-white ">
-              <div className="p-2 inline-flex">
-                <span className="font-bold text-matcha">Subtasks</span>&ensp;
-                <button className="px-3 h-fit bg-matcha text-white rounded-full">
-                  + add a subtask
-                </button>
+              <div className="w-full">
+                <div className="w-full p-2 inline-flex justify-between">
+                  <span className="font-bold text-matcha items-center flex">
+                    Subtasks
+                  </span>
+                  &ensp;
+                  <button
+                    className="px-3 py-1 h-fit bg-matcha text-white rounded-full text-sm"
+                    onClick={createNewSubtask}
+                  >
+                    + add a subtask
+                  </button>
+                </div>
+                <ul>
+                  {task.subtasks.map((subtask, i) => (
+                    <li key={i}>
+                      <div className="">
+                        <label>
+                          <input
+                            checked={subtask.checked}
+                            onChange={(e) => setSubtaskChecked(e, i)}
+                            className="accent-green-700 mr-2"
+                            type="checkbox"
+                          />
+                          <input
+                            value={subtask.name}
+                            onChange={(e) => setSubtaskName(e, i)}
+                            className="appearance-none border-2 border-gray-200 rounded-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white"
+                          ></input>
+                          <button
+                            className="rounded-full text-white py-1 px-1"
+                            onClick={() => deleteSubtask(i)}
+                          >
+                            <DeleteOutlineIcon
+                              fontSize="small"
+                              sx={{ color: "var(--matcha)" }}
+                            ></DeleteOutlineIcon>
+                          </button>
+                        </label>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </div>
               <div className="p-2">
                 <textarea
                   rows={10}
                   className="appearance-none border-2 border-gray-200 rounded-md w-full py-2 px-4 text-gray-700 focus:outline-none focus:bg-white resize-none h-20"
                   placeholder="Description..."
-                  value={value.description}
+                  value={task.description}
+                  onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
               </div>
             </div>
           </div>
           <div>
-            <div className="flex items-end gap-1 justify-end">
-              <button className="px-3 py-1 bg-matcha text-white rounded-md">
-                cancel
-              </button>
-              <button className="px-3 py-1 bg-matcha text-white rounded-md">
-                save
-              </button>
+            <div className="flex justify-between">
+              <div>
+                <button onClick={() => setTaskChecked()}>
+                  {checked && <TaskAltIcon></TaskAltIcon>}
+                  {!checked && (
+                    <RadioButtonUncheckedIcon></RadioButtonUncheckedIcon>
+                  )}
+                </button>
+              </div>
+              <div className="flex items-end gap-1">
+                <button
+                  className="px-3 py-1 bg-matcha text-white rounded-md"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                >
+                  cancel
+                </button>
+                <button
+                  className="px-3 py-1 bg-matcha text-white rounded-md"
+                  onClick={() => saveNewTask(task)}
+                >
+                  save
+                </button>
+              </div>
             </div>
           </div>
         </div>

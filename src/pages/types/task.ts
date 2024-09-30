@@ -1,10 +1,13 @@
 export interface Task {
+  id: string;
   name: string;
   start_time: Date;
   finished_time: Date;
-  duration_hour: number;
-  duration_minute: number;
   description: string;
   checked: boolean;
-  subtasks: [];
+  subtasks: Subtask[];
+}
+export interface Subtask {
+  name: string;
+  checked: boolean;
 }

@@ -1,9 +1,10 @@
 import localFont from "next/font/local";
 import { Task } from "./types/task";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dayjs } from "dayjs";
 import CalendarModal from "./components/CalendarModal";
 import EditTaskModal from "./components/EditTaskModal";
+import { getTaskByDate } from "./api/task.service";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -15,38 +16,6 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
-const tasks: Task[] = [
-  {
-    name: "Create react project",
-    duration_hour: 2,
-    duration_minute: 45,
-    start_time: new Date("2024-09-15T10:34:00"),
-    finished_time: new Date("2024-09-15T12:34:00"),
-    description: "",
-    checked: false,
-    subtasks: [],
-  },
-  {
-    name: "Correct CV",
-    duration_hour: 1,
-    duration_minute: 55,
-    start_time: new Date("2024-09-15T12:34:00"),
-    finished_time: new Date("2024-09-15T15:34:00"),
-    description: "",
-    checked: false,
-    subtasks: [],
-  },
-  {
-    name: "3000m run",
-    duration_hour: 3,
-    duration_minute: 45,
-    start_time: new Date("2024-09-15T12:34:00"),
-    finished_time: new Date("2024-09-15T17:34:00"),
-    description: "",
-    checked: false,
-    subtasks: [],
-  },
-];
 
 export default function Home() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -88,6 +57,29 @@ export default function Home() {
   const onDateChange = (newDate: Dayjs) => {
     setDate(newDate.toDate());
   };
+
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getTasks = async () => {
+      try {
+        const taskData = await getTaskByDate(date);
+        setTasks(taskData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching tasks: ", error);
+        setLoading(false);
+      }
+    };
+
+    getTasks();
+  }, [date]);
+
+  if (loading) {
+    // TODO add a better loader
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -131,7 +123,7 @@ export default function Home() {
                 <div className="col-span-2">
                   <p className="pb-2 font-semibold">{task.name}</p>
                   <p>
-                    {task.duration_hour} hours {task.duration_minute} minutes
+                    {/* {task.duration_hour} hours {task.duration_minute} minutes */}
                   </p>
                   {/* <div className="flex">
                       <input type="number" min="0" className="block w-24 rounded-l-lg border-0 py-1.5 pl-4 pr-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:none sm:text-sm sm:leading-6 focus:outline-none" placeholder="hours"></input>
@@ -167,15 +159,15 @@ export default function Home() {
         <div className="px-8 float-right	">
           <button
             className="bg-lime-800 rounded-full text-white py-2 px-4"
-            onClick={openEditTaskModal}
+            onClick={() => openEditTaskModal}
           >
             +
           </button>
         </div>
-        {isEditTaskOpen && (
+        {isEditTaskOpen && task && (
           <EditTaskModal
-            onClose={closeEditTaskModal}
-            value={task}
+            onClose={() => closeEditTaskModal}
+            task={task}
           ></EditTaskModal>
         )}
       </footer>
