@@ -4,13 +4,13 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import dayjs from "dayjs";
-import { customDatePicker, customDigitalClockSectionItem } from "./CustomStyle";
-import { Subtask, Task } from "../types/task";
 import { ChangeEvent, useMemo, useState } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { updateTask } from "../api/task.service";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import { Subtask, Task } from "@/types/task";
+import { customDatePicker, customDigitalClockSectionItem } from "@/styles/CustomStyle";
+import { updateTask } from "@/api/task.service";
 
 interface EditTaskModalProps {
   task: Task;

@@ -11,7 +11,7 @@ import {
   Timestamp,
   where,
 } from "firebase/firestore";
-import { Task } from "../types/task";
+import { Task } from "../../types/task";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
