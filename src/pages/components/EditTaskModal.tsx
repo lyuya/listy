@@ -223,7 +223,7 @@ export default function EditTaskModal({
           <div>
             <div className="flex justify-between">
               <div>
-                <button onClick={() => setTaskChecked()}>
+                <button onClick={setTaskChecked}>
                   {checked && <TaskAltIcon></TaskAltIcon>}
                   {!checked && (
                     <RadioButtonUncheckedIcon></RadioButtonUncheckedIcon>
@@ -242,7 +242,10 @@ export default function EditTaskModal({
                 </button>
                 <button
                   className="px-3 py-1 bg-matcha text-white rounded-md"
-                  onClick={() => saveNewTask(task)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    saveNewTask(task);
+                  }}
                 >
                   save
                 </button>

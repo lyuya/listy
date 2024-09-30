@@ -21,7 +21,8 @@ export default function Home() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
   const [task, setTask] = useState<Task>();
-
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
   const [date, setDate] = useState<Date>(new Date());
 
   const addOneDay = () => {
@@ -44,7 +45,7 @@ export default function Home() {
     setIsCalendarOpen(false);
   };
 
-  const openEditTaskModal = (task?: Task) => {
+  const openEditTaskModal = (task: Task) => {
     setIsEditTaskOpen(true);
     setTask(task);
   };
@@ -58,8 +59,17 @@ export default function Home() {
     setDate(newDate.toDate());
   };
 
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
+  const createNewTask = () => {
+    const newTask: Task = {
+      name: "",
+      start_time: undefined,
+      finished_time: undefined,
+      description: "",
+      checked: false,
+      subtasks: [],
+    };
+    openEditTaskModal(newTask);
+  };
 
   useEffect(() => {
     const getTasks = async () => {
@@ -159,14 +169,14 @@ export default function Home() {
         <div className="px-8 float-right	">
           <button
             className="bg-lime-800 rounded-full text-white py-2 px-4"
-            onClick={() => openEditTaskModal}
+            onClick={createNewTask}
           >
             +
           </button>
         </div>
         {isEditTaskOpen && task && (
           <EditTaskModal
-            onClose={() => closeEditTaskModal}
+            onClose={closeEditTaskModal}
             task={task}
           ></EditTaskModal>
         )}
