@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDocs,
   getFirestore,
@@ -63,4 +64,10 @@ const updateTask = async (newTask: Task): Promise<void> => {
     addDoc(tasks, newTask);
   }
 };
-export { getTaskByDate, updateTask };
+
+const deleteTask = async (id: string): Promise<void> => {
+  const taskDocRef = doc(db, "task", id);
+  await deleteDoc(taskDocRef);
+};
+
+export { getTaskByDate, updateTask, deleteTask };

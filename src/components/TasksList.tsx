@@ -6,6 +6,7 @@ import { getTaskByDate } from "@/api/task.service";
 import { useDispatch } from "react-redux";
 import { loadTasksReducer } from "@/store/taskSlice";
 import { useAppSelector } from "@/store/hooks";
+import { Task } from "@/types/task";
 
 export default function TasksList() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -15,10 +16,15 @@ export default function TasksList() {
   const [date, setDate] = useState<Date>(new Date());
   const dispatch = useDispatch();
   const tasks = useAppSelector((state) => state.task.value);
-  const defaultTask = {
+  const nextRoundedTime = (date: Date) => {
+    date.setHours(date.getHours() + 1);
+    date.setMinutes(0, 0, 0);
+    return date.getTime();
+  };
+  const defaultTask: Task = {
     name: "",
-    startTime: undefined,
-    endTime: undefined,
+    startTime: nextRoundedTime(new Date()),
+    endTime: nextRoundedTime(new Date()),
     description: "",
     checked: false,
     subtasks: [],
@@ -51,7 +57,7 @@ export default function TasksList() {
   const closeEditTaskModal = () => {
     setIsEditTaskOpen(false);
     setTaskIndex(undefined);
-    getTasks()
+    getTasks();
   };
 
   const onDateChange = (newDate: Dayjs) => {

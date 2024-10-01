@@ -13,11 +13,12 @@ import {
   customDatePicker,
   customDigitalClockSectionItem,
 } from "@/styles/CustomStyle";
-import { updateTask } from "@/api/task.service";
+import { deleteTask, updateTask } from "@/api/task.service";
 import { useDispatch } from "react-redux";
 import { toggleTaskReducer } from "@/store/taskSlice";
-import utc from 'dayjs/plugin/utc'
-import timezone from 'dayjs/plugin/timezone';
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
 interface EditTaskModalProps {
   task: Task;
@@ -30,6 +31,8 @@ export default function EditTaskModal({
 }: EditTaskModalProps) {
   let [task, setTask] = useState({ ...initialTask });
   let [checked, setChecked] = useState(initialTask.checked);
+  let [isDeleteConfirmationModalVisible, setisDeleteConfirmationModalVisible] =
+    useState<boolean>(false);
   dayjs.extend(utc);
   dayjs.extend(timezone);
   const dispatch = useDispatch();
@@ -41,12 +44,15 @@ export default function EditTaskModal({
   const finishedDate = useMemo(() => {
     if (task.endTime) return dayjs(task.endTime);
   }, [task.endTime]);
+
   const saveNewTask = (taskEdited: Task) => {
     updateTask(taskEdited).then(
       async () => {
         onClose();
       },
-      (error) => {console.error('Error updating task:', error)}
+      (error) => {
+        console.error("Error updating task:", error);
+      },
     );
   };
   const createNewSubtask = () => {
@@ -97,7 +103,11 @@ export default function EditTaskModal({
     const taskCloned = { ...task };
     let dateWithStartTimeUpdated = new Date(taskCloned.startTime);
     let dateWithEndTimeUpdated = new Date(taskCloned.endTime);
-    dateWithStartTimeUpdated.setFullYear(date.year(), date.month(), date.date());    
+    dateWithStartTimeUpdated.setFullYear(
+      date.year(),
+      date.month(),
+      date.date(),
+    );
     dateWithEndTimeUpdated.setFullYear(date.year(), date.month(), date.date());
 
     taskCloned.startTime = dateWithStartTimeUpdated.getTime();
@@ -105,26 +115,26 @@ export default function EditTaskModal({
     setTask(taskCloned);
   };
 
-  const setTime = (newTime: Dayjs, field: 'startTime' | 'endTime') => {
+  const setTime = (newTime: Dayjs, field: "startTime" | "endTime") => {
     const taskCloned = { ...task };
     let dateWithTimeUpdated = new Date(taskCloned[field]);
     dateWithTimeUpdated.setHours(newTime.hour(), newTime.minute(), 0, 0);
     taskCloned[field] = dateWithTimeUpdated.getTime();
     setTask(taskCloned);
-  }
+  };
 
   const setEndTime = (date: Dayjs | null) => {
     if (!date) {
       return;
     }
-    setTime(date, 'endTime');
+    setTime(date, "endTime");
   };
 
   const setStartTime = (date: Dayjs | null) => {
     if (!date) {
       return;
     }
-    setTime(date, 'startTime');
+    setTime(date, "startTime");
   };
 
   const setTaskName = (name: string) => {
@@ -139,10 +149,29 @@ export default function EditTaskModal({
     setChecked(taskCloned.checked);
     updateTask(taskCloned).then(
       () => dispatch(toggleTaskReducer(taskCloned)),
-      (error) => console.error('Error updating task:', error)
+      (error) => console.error("Error updating task:", error),
     );
-    
   };
+
+  const openDeleteConfirmationModal = () => {
+    setisDeleteConfirmationModalVisible(true);
+  };
+
+  const deleteCurrentTask = (confirmation: boolean) => {
+    if (!confirmation || !task.id) {
+      setisDeleteConfirmationModalVisible(false);
+      return;
+    }
+
+    deleteTask(task.id).then(
+      () => {
+        setisDeleteConfirmationModalVisible(false);
+        onClose();
+      },
+      (error) => console.error("Error updating task:", error),
+    );
+  };
+
   return (
     <>
       <div
@@ -157,7 +186,9 @@ export default function EditTaskModal({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="border-b-1">
-            <span className="font-bold text-matcha text-xl">Edit task</span>
+            <span className="font-bold text-matcha text-xl">
+              {task.id ? "Edit task" : "New task"}
+            </span>
             <button className="modal-close" onClick={onClose}>
               &times;
             </button>
@@ -202,7 +233,9 @@ export default function EditTaskModal({
                         ...customDigitalClockSectionItem,
                       },
                     }}
-                    onChange={(date) => {setEndTime(date)}}
+                    onChange={(date) => {
+                      setEndTime(date);
+                    }}
                   />
                 </LocalizationProvider>
               </>
@@ -281,13 +314,27 @@ export default function EditTaskModal({
           </div>
           <div>
             <div className="flex justify-between">
-              <div>
+              <div className="flex gap-2">
                 <button onClick={setTaskChecked}>
-                  {checked && <TaskAltIcon></TaskAltIcon>}
+                  {checked && (
+                    <TaskAltIcon sx={{ color: "var(--matcha)" }}></TaskAltIcon>
+                  )}
                   {!checked && (
-                    <RadioButtonUncheckedIcon></RadioButtonUncheckedIcon>
+                    <RadioButtonUncheckedIcon
+                      sx={{ color: "var(--matcha)" }}
+                    ></RadioButtonUncheckedIcon>
                   )}
                 </button>
+                <button onClick={openDeleteConfirmationModal}>
+                  <DeleteOutlineIcon
+                    sx={{ color: "var(--matcha)" }}
+                  ></DeleteOutlineIcon>
+                </button>
+                {isDeleteConfirmationModalVisible && (
+                  <DeleteConfirmationModal
+                    onClose={deleteCurrentTask}
+                  ></DeleteConfirmationModal>
+                )}
               </div>
               <div className="flex items-end gap-1">
                 <button

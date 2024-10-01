@@ -5,7 +5,7 @@ export const makeStore = () => {
   return configureStore({
     reducer: {
       task: taskReducer,
-    }
+    },
   });
 };
 
