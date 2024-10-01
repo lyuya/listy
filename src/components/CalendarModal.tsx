@@ -2,13 +2,13 @@ import React, { useMemo } from "react";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { customDatePicker } from "@/styles/CustomStyle";
 
 interface CalendarModalProps {
-  onClose: () => {};
+  onClose: () => void;
   defaultDate: Date;
-  onDateChange: () => {};
+  onDateChange: (date: Dayjs) => void;
 }
 
 const CalendarModal = ({

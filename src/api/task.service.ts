@@ -1,4 +1,4 @@
-// Import the functions you need from the SDKs you need
+import { Task } from "@/types/task";
 import { initializeApp } from "firebase/app";
 import {
   addDoc,
@@ -11,12 +11,7 @@ import {
   Timestamp,
   where,
 } from "firebase/firestore";
-import { Task } from "../../types/task";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -26,8 +21,7 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
-console.log("firebaseConfig.apiKey", firebaseConfig.apiKey);
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const tasks = collection(db, "task");
@@ -35,28 +29,27 @@ const tasks = collection(db, "task");
 const getTaskByDate = async (date: Date): Promise<Task[]> => {
   try {
     let dateBefore = new Date(date);
-    dateBefore.setUTCHours(0, 0, 0, 0);
+    dateBefore.setHours(0, 0, 0, 0);
     let dateAfter = new Date(date);
-    dateAfter.setDate(date.getDate() + 1);
-    dateAfter.setUTCHours(23, 59, 59, 999);
+    dateAfter.setHours(23, 59, 59, 999);
+
     const q = query(
       tasks,
-      where("start_time", ">=", Timestamp.fromDate(dateBefore)),
-      where("start_time", "<", Timestamp.fromDate(dateAfter)),
+      where("start_time", ">=", Timestamp.fromDate(dateBefore).seconds * 1000),
+      where("start_time", "<", Timestamp.fromDate(dateAfter).seconds * 1000),
     );
     const tasksSnapshotWithCurrentDateQuery = getDocs(q);
     const taskList: Task[] = (await tasksSnapshotWithCurrentDateQuery).docs.map(
       (doc) => ({
         id: doc.id,
         name: doc.data()["name"],
-        start_time: (doc.data()["start_time"] as Timestamp).toDate(),
-        finished_time: (doc.data()["finished_time"] as Timestamp).toDate(),
+        start_time: doc.data()["start_time"],
+        finished_time: doc.data()["finished_time"],
         checked: doc.data()["checked"],
         description: doc.data()["description"],
         subtasks: doc.data()["subtasks"],
       }),
     );
-    console.log(taskList);
     return taskList;
   } catch (error) {
     console.error("Error fetching tasks:", error);

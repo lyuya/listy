@@ -9,12 +9,17 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { Subtask, Task } from "@/types/task";
-import { customDatePicker, customDigitalClockSectionItem } from "@/styles/CustomStyle";
+import {
+  customDatePicker,
+  customDigitalClockSectionItem,
+} from "@/styles/CustomStyle";
 import { updateTask } from "@/api/task.service";
+import { useDispatch } from "react-redux";
+import { toggleTaskReducer, updateTaskReducer } from "@/store/taskSlice";
 
 interface EditTaskModalProps {
   task: Task;
-  onClose: () => {};
+  onClose: () => void;
 }
 
 export default function EditTaskModal({
@@ -24,13 +29,20 @@ export default function EditTaskModal({
   let [task, setTask] = useState({ ...initialTask });
   let [checked, setChecked] = useState(initialTask.checked);
 
-  const startDate = useMemo(() => dayjs(task.start_time), [task.start_time]);
-  const finishedDate = useMemo(
-    () => dayjs(task.finished_time),
-    [task.finished_time],
-  );
+  const dispatch = useDispatch();
+
+  const startDate = useMemo(() => {
+    if (task.start_time) return dayjs(task.start_time);
+  }, [task.start_time]);
+
+  const finishedDate = useMemo(() => {
+    if (task.finished_time) return dayjs(task.finished_time);
+  }, [task.finished_time]);
   const saveNewTask = (taskEdited: Task) => {
     updateTask(taskEdited);
+    // TODO: manage error
+    dispatch(updateTaskReducer(taskEdited));
+
     onClose();
   };
   const createNewSubtask = () => {
@@ -85,8 +97,8 @@ export default function EditTaskModal({
     taskCloned.checked = !taskCloned.checked;
     setChecked(taskCloned.checked);
     updateTask(taskCloned);
+    dispatch(toggleTaskReducer(taskCloned));
   };
-
   return (
     <>
       <div
@@ -149,20 +161,20 @@ export default function EditTaskModal({
               </>
             </div>
             <div>
-              <div>
-                {task.finished_time ? (
+              {/* <div>
+                {task.finished_time && task.start_time ? (
                   <p className="text-sm text-gray-500	">
                     Duration:{" "}
-                    {(task.finished_time.getTime() -
-                      task.start_time.getTime()) /
-                      60000}
+                    {(task.finished_time -
+                      task.start_time /
+                      60000)}
                   </p>
                 ) : (
                   <button>
                     <img src="check.png"></img>
                   </button>
                 )}
-              </div>
+              </div> */}
             </div>
             <div className="min-h-40 grid grid-cols-2 divide-x divide-white ">
               <div className="w-full">
