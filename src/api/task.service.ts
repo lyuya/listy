@@ -57,14 +57,10 @@ const getTaskByDate = async (date: Date): Promise<Task[]> => {
   }
 };
 const updateTask = async (newTask: Task): Promise<void> => {
-  try {
-    if (newTask.id) {
-      setDoc(doc(db, "task", newTask.id), newTask);
-    } else {
-      addDoc(tasks, newTask);
-    }
-  } catch (error) {
-    console.error("Error fetching tasks:", error);
+  if (newTask.id) {
+    setDoc(doc(db, "task", newTask.id), newTask);
+  } else {
+    addDoc(tasks, newTask);
   }
 };
 export { getTaskByDate, updateTask };

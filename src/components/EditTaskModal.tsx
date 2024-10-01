@@ -39,10 +39,10 @@ export default function EditTaskModal({
     if (task.finished_time) return dayjs(task.finished_time);
   }, [task.finished_time]);
   const saveNewTask = (taskEdited: Task) => {
-    updateTask(taskEdited);
-    // TODO: manage error
-    dispatch(updateTaskReducer(taskEdited));
-
+    updateTask(taskEdited).then(
+      () => dispatch(updateTaskReducer(taskEdited)),
+      (error) => {console.error('Error updating task:', error)}
+    );
     onClose();
   };
   const createNewSubtask = () => {
@@ -96,8 +96,11 @@ export default function EditTaskModal({
     const taskCloned = { ...initialTask };
     taskCloned.checked = !taskCloned.checked;
     setChecked(taskCloned.checked);
-    updateTask(taskCloned);
-    dispatch(toggleTaskReducer(taskCloned));
+    updateTask(taskCloned).then(
+      () => dispatch(toggleTaskReducer(taskCloned)),
+      (error) => console.error('Error updating task:', error)
+    );
+    
   };
   return (
     <>

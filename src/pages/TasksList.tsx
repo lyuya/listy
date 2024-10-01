@@ -81,7 +81,6 @@ export default function TasksList() {
   }, [date]);
 
   if (loading) {
-    // TODO add a better loader
     return <div>Loading...</div>;
   }
   return (
