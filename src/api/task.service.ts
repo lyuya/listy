@@ -35,16 +35,16 @@ const getTaskByDate = async (date: Date): Promise<Task[]> => {
 
     const q = query(
       tasks,
-      where("start_time", ">=", Timestamp.fromDate(dateBefore).seconds * 1000),
-      where("start_time", "<", Timestamp.fromDate(dateAfter).seconds * 1000),
+      where("startTime", ">=", Timestamp.fromDate(dateBefore).seconds * 1000),
+      where("startTime", "<", Timestamp.fromDate(dateAfter).seconds * 1000),
     );
     const tasksSnapshotWithCurrentDateQuery = getDocs(q);
     const taskList: Task[] = (await tasksSnapshotWithCurrentDateQuery).docs.map(
       (doc) => ({
         id: doc.id,
         name: doc.data()["name"],
-        start_time: doc.data()["start_time"],
-        finished_time: doc.data()["finished_time"],
+        startTime: doc.data()["startTime"],
+        endTime: doc.data()["endTime"],
         checked: doc.data()["checked"],
         description: doc.data()["description"],
         subtasks: doc.data()["subtasks"],

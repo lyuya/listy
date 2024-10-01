@@ -1,8 +1,8 @@
 export interface Task {
   id?: string;
   name: string;
-  start_time?: number;
-  finished_time?: number;
+  startTime: number;
+  endTime: number;
   description: string;
   checked: boolean;
   subtasks: Subtask[];

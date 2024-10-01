@@ -17,8 +17,8 @@ export default function TasksList() {
   const tasks = useAppSelector((state) => state.task.value);
   const defaultTask = {
     name: "",
-    start_time: undefined,
-    finished_time: undefined,
+    startTime: undefined,
+    endTime: undefined,
     description: "",
     checked: false,
     subtasks: [],
@@ -51,6 +51,7 @@ export default function TasksList() {
   const closeEditTaskModal = () => {
     setIsEditTaskOpen(false);
     setTaskIndex(undefined);
+    getTasks()
   };
 
   const onDateChange = (newDate: Dayjs) => {
@@ -65,18 +66,18 @@ export default function TasksList() {
     setIsEditTaskOpen(true);
   };
 
-  useEffect(() => {
-    const getTasks = async () => {
-      try {
-        const taskData = await getTaskByDate(date);
-        dispatch(loadTasksReducer(taskData));
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching tasks: ", error);
-        setLoading(false);
-      }
-    };
+  const getTasks = async () => {
+    try {
+      const taskData = await getTaskByDate(date);
+      dispatch(loadTasksReducer(taskData));
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching tasks: ", error);
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     getTasks();
   }, [date]);
 
@@ -135,7 +136,7 @@ export default function TasksList() {
                       </div> */}
                 </div>
                 <div>
-                  {task.finished_time ? (
+                  {task.endTime ? (
                     <p className="text-sm text-gray-500	">
                       {/* Finished at {task.finished_time.toUTCString()} */}
                     </p>

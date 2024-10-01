@@ -36,7 +36,6 @@ export const taskSlice = createSlice({
 
 export const {
   loadTasksReducer,
-  updateTaskReducer,
   deleteTaskReducer,
   toggleTaskReducer,
 } = taskSlice.actions;

@@ -3,7 +3,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { ChangeEvent, useMemo, useState } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
@@ -15,7 +15,9 @@ import {
 } from "@/styles/CustomStyle";
 import { updateTask } from "@/api/task.service";
 import { useDispatch } from "react-redux";
-import { toggleTaskReducer, updateTaskReducer } from "@/store/taskSlice";
+import { toggleTaskReducer } from "@/store/taskSlice";
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone';
 
 interface EditTaskModalProps {
   task: Task;
@@ -28,22 +30,24 @@ export default function EditTaskModal({
 }: EditTaskModalProps) {
   let [task, setTask] = useState({ ...initialTask });
   let [checked, setChecked] = useState(initialTask.checked);
-
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
   const dispatch = useDispatch();
 
-  const startDate = useMemo(() => {
-    if (task.start_time) return dayjs(task.start_time);
-  }, [task.start_time]);
+  const startDate: Dayjs = useMemo(() => {
+    return dayjs(task.startTime);
+  }, [task.startTime]);
 
   const finishedDate = useMemo(() => {
-    if (task.finished_time) return dayjs(task.finished_time);
-  }, [task.finished_time]);
+    if (task.endTime) return dayjs(task.endTime);
+  }, [task.endTime]);
   const saveNewTask = (taskEdited: Task) => {
     updateTask(taskEdited).then(
-      () => dispatch(updateTaskReducer(taskEdited)),
+      async () => {
+        onClose();
+      },
       (error) => {console.error('Error updating task:', error)}
     );
-    onClose();
   };
   const createNewSubtask = () => {
     let newSubtask: Subtask = {
@@ -84,6 +88,43 @@ export default function EditTaskModal({
     const taskCloned = { ...task };
     taskCloned.description = description;
     setTask(taskCloned);
+  };
+
+  const setTaskDate = (date: Dayjs | null) => {
+    if (!date) {
+      return;
+    }
+    const taskCloned = { ...task };
+    let dateWithStartTimeUpdated = new Date(taskCloned.startTime);
+    let dateWithEndTimeUpdated = new Date(taskCloned.endTime);
+    dateWithStartTimeUpdated.setFullYear(date.year(), date.month(), date.date());    
+    dateWithEndTimeUpdated.setFullYear(date.year(), date.month(), date.date());
+
+    taskCloned.startTime = dateWithStartTimeUpdated.getTime();
+    taskCloned.endTime = dateWithEndTimeUpdated.getTime();
+    setTask(taskCloned);
+  };
+
+  const setTime = (newTime: Dayjs, field: 'startTime' | 'endTime') => {
+    const taskCloned = { ...task };
+    let dateWithTimeUpdated = new Date(taskCloned[field]);
+    dateWithTimeUpdated.setHours(newTime.hour(), newTime.minute(), 0, 0);
+    taskCloned[field] = dateWithTimeUpdated.getTime();
+    setTask(taskCloned);
+  }
+
+  const setEndTime = (date: Dayjs | null) => {
+    if (!date) {
+      return;
+    }
+    setTime(date, 'endTime');
+  };
+
+  const setStartTime = (date: Dayjs | null) => {
+    if (!date) {
+      return;
+    }
+    setTime(date, 'startTime');
   };
 
   const setTaskName = (name: string) => {
@@ -139,6 +180,7 @@ export default function EditTaskModal({
                       ...customDatePicker,
                       textField: { size: "small" },
                     }}
+                    onChange={(date) => setTaskDate(date)}
                   />
                   <TimePicker
                     value={startDate}
@@ -146,6 +188,7 @@ export default function EditTaskModal({
                       textField: { size: "small" },
                       actionBar: { actions: [] },
                     }}
+                    onChange={(date) => setStartTime(date)}
                   />
                   <div className="my-auto">
                     <ArrowForwardIcon></ArrowForwardIcon>
@@ -159,6 +202,7 @@ export default function EditTaskModal({
                         ...customDigitalClockSectionItem,
                       },
                     }}
+                    onChange={(date) => {setEndTime(date)}}
                   />
                 </LocalizationProvider>
               </>
