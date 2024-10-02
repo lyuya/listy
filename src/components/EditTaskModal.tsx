@@ -36,7 +36,6 @@ export default function EditTaskModal({
   dayjs.extend(utc);
   dayjs.extend(timezone);
   const dispatch = useDispatch();
-
   const startDate: Dayjs = useMemo(() => {
     return dayjs(task.startTime);
   }, [task.startTime]);
@@ -55,6 +54,7 @@ export default function EditTaskModal({
       },
     );
   };
+
   const createNewSubtask = () => {
     let newSubtask: Subtask = {
       name: "",
@@ -144,11 +144,19 @@ export default function EditTaskModal({
   };
 
   const setTaskChecked = () => {
-    const taskCloned = { ...initialTask };
-    taskCloned.checked = !taskCloned.checked;
-    setChecked(taskCloned.checked);
-    updateTask(taskCloned).then(
-      () => dispatch(toggleTaskReducer(taskCloned)),
+    // create a copy of task with only new value of checked
+    const initialTaskCloned = { ...initialTask };
+    initialTaskCloned.checked = !initialTaskCloned.checked;
+    setChecked(initialTaskCloned.checked);
+    // update also the new value of checked in task state
+    let taskCloned = { ...task };
+    taskCloned.checked = initialTaskCloned.checked;
+    setTask(taskCloned);
+
+    updateTask(initialTaskCloned).then(
+      () => {
+        dispatch(toggleTaskReducer(initialTaskCloned));
+      },
       (error) => console.error("Error updating task:", error),
     );
   };

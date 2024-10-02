@@ -14,11 +14,6 @@ export const taskSlice = createSlice({
     loadTasksReducer: (state, tasks) => {
       state.value = tasks.payload;
     },
-    updateTaskReducer: (state, action) => {
-      state.value = state.value.map((task: Task) =>
-        task.id === action.payload.id ? { ...action.payload } : task,
-      ) as never[];
-    },
     deleteTaskReducer: (state, action) => {
       state.value = state.value.filter(
         (task: Task) => task.id !== action.payload.id,
