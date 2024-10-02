@@ -115,26 +115,43 @@ export default function EditTaskModal({
     setTask(taskCloned);
   };
 
-  const setTime = (newTime: Dayjs, field: "startTime" | "endTime") => {
+  const setTime = (
+    task: Task,
+    newTime: Dayjs,
+    field: "startTime" | "endTime",
+  ) => {
     const taskCloned = { ...task };
     let dateWithTimeUpdated = new Date(taskCloned[field]);
     dateWithTimeUpdated.setHours(newTime.hour(), newTime.minute(), 0, 0);
     taskCloned[field] = dateWithTimeUpdated.getTime();
-    setTask(taskCloned);
-  };
-
-  const setEndTime = (date: Dayjs | null) => {
-    if (!date) {
-      return;
-    }
-    setTime(date, "endTime");
+    return taskCloned;
   };
 
   const setStartTime = (date: Dayjs | null) => {
     if (!date) {
       return;
     }
-    setTime(date, "startTime");
+    let taskUpdated = setTime(task, date, "startTime");
+    console.log(
+      date.millisecond() > task.endTime,
+      date.valueOf(),
+      task.endTime,
+    );
+    if (date.valueOf() > task.endTime) {
+      taskUpdated = setTime(taskUpdated, date, "endTime");
+    }
+    setTask(taskUpdated);
+  };
+
+  const setEndTime = (date: Dayjs | null) => {
+    if (!date) {
+      return;
+    }
+    let taskUpdated = setTime(task, date, "endTime");
+    if (task.startTime > date.valueOf()) {
+      taskUpdated = setTime(taskUpdated, date, "startTime");
+    }
+    setTask(taskUpdated);
   };
 
   const setTaskName = (name: string) => {
