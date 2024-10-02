@@ -11,8 +11,8 @@ export const taskSlice = createSlice({
   name: "task",
   initialState,
   reducers: {
-    loadTasksReducer: (state, tasks) => {
-      state.value = tasks.payload;
+    loadTasksReducer: (state, action) => {
+      state.value = action.payload;
     },
     deleteTaskReducer: (state, action) => {
       state.value = state.value.filter(
@@ -24,7 +24,7 @@ export const taskSlice = createSlice({
         task.id === action.payload.id
           ? { ...task, checked: !task.checked }
           : task,
-      ) as never[];
+      );
     },
   },
 });

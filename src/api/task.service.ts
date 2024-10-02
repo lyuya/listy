@@ -51,6 +51,7 @@ const getTaskByDate = async (date: Date): Promise<Task[]> => {
         subtasks: doc.data()["subtasks"],
       }),
     );
+    taskList.sort((task1, task2) => task1.startTime - task2.startTime);
     return taskList;
   } catch (error) {
     console.error("Error fetching tasks:", error);
