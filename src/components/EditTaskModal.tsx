@@ -71,7 +71,7 @@ export default function EditTaskModal({
     };
     let subtaskList = [...task.subtasks];
     subtaskList[i] = subtask;
-    setTask({...task, subtasks: subtaskList});
+    setTask({ ...task, subtasks: subtaskList });
   };
 
   const setSubtaskChecked = (e: ChangeEvent<HTMLInputElement>, i: number) => {
@@ -81,13 +81,13 @@ export default function EditTaskModal({
     };
     let subtaskList = [...task.subtasks];
     subtaskList[i] = subtask;
-    setTask({...task, subtasks: subtaskList});
+    setTask({ ...task, subtasks: subtaskList });
   };
 
   const deleteSubtask = (i: number) => {
     let subtaskList = [...task.subtasks];
     subtaskList.splice(i, 1);
-    setTask({...task, subtasks: subtaskList});
+    setTask({ ...task, subtasks: subtaskList });
   };
 
   const setDescription = (description: string) => {
@@ -260,25 +260,15 @@ export default function EditTaskModal({
                 </LocalizationProvider>
               </>
             </div>
-            <div>
-              {/* <div>
-                {task.finished_time && task.start_time ? (
-                  <p className="text-sm text-gray-500	">
-                    Duration:{" "}
-                    {(task.finished_time -
-                      task.start_time /
-                      60000)}
-                  </p>
-                ) : (
-                  <button>
-                    <img src="check.png"></img>
-                  </button>
-                )}
-              </div> */}
+            <div className="px-2 text-sm">
+              <p>
+                {Math.floor((task.endTime - task.startTime) / 60000 / 60)} hours{" "}
+                {((task.endTime - task.startTime) / 60000) % 60} minutes
+              </p>
             </div>
             <div className="min-h-40 grid grid-cols-2 divide-x divide-white ">
               <div className="w-full">
-                <div className="w-full p-2 inline-flex justify-between">
+                <div className="w-full p-3 inline-flex justify-between">
                   <span className="font-bold text-matcha items-center flex">
                     Subtasks
                   </span>
@@ -290,11 +280,11 @@ export default function EditTaskModal({
                     + add a subtask
                   </button>
                 </div>
-                <ul>
+                <ul className="p-3">
                   {task.subtasks.map((subtask, i) => (
                     <li key={i}>
-                      <div className="">
-                        <label>
+                      <div className="w-full flex justify-between">
+                        <div>
                           <input
                             checked={subtask.checked}
                             onChange={(e) => setSubtaskChecked(e, i)}
@@ -306,22 +296,23 @@ export default function EditTaskModal({
                             onChange={(e) => setSubtaskName(e, i)}
                             className="appearance-none border-2 border-gray-200 rounded-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white"
                           ></input>
-                          <button
-                            className="rounded-full text-white py-1 px-1"
-                            onClick={() => deleteSubtask(i)}
-                          >
-                            <DeleteOutlineIcon
-                              fontSize="small"
-                              sx={{ color: "var(--matcha)" }}
-                            ></DeleteOutlineIcon>
-                          </button>
-                        </label>
+                        </div>
+
+                        <button
+                          className="rounded-full text-white py-1 px-1 my-auto"
+                          onClick={() => deleteSubtask(i)}
+                        >
+                          <DeleteOutlineIcon
+                            fontSize="small"
+                            sx={{ color: "var(--matcha)" }}
+                          ></DeleteOutlineIcon>
+                        </button>
                       </div>
                     </li>
                   ))}
                 </ul>
               </div>
-              <div className="p-2">
+              <div className="p-3">
                 <textarea
                   rows={10}
                   className="appearance-none border-2 border-gray-200 rounded-md w-full py-2 px-4 text-gray-700 focus:outline-none focus:bg-white resize-none h-20"
