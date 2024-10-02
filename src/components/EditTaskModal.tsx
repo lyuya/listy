@@ -69,9 +69,9 @@ export default function EditTaskModal({
       ...task.subtasks[i],
       name: e.target.value,
     };
-    const taskCloned = { ...task };
-    taskCloned.subtasks[i] = subtask;
-    setTask(taskCloned);
+    let subtaskList = [...task.subtasks];
+    subtaskList[i] = subtask;
+    setTask({...task, subtasks: subtaskList});
   };
 
   const setSubtaskChecked = (e: ChangeEvent<HTMLInputElement>, i: number) => {
@@ -79,15 +79,15 @@ export default function EditTaskModal({
       ...task.subtasks[i],
       checked: e.target.checked,
     };
-    const taskCloned = { ...task };
-    taskCloned.subtasks[i] = subtask;
-    setTask(taskCloned);
+    let subtaskList = [...task.subtasks];
+    subtaskList[i] = subtask;
+    setTask({...task, subtasks: subtaskList});
   };
 
   const deleteSubtask = (i: number) => {
-    const taskCloned = { ...task };
-    taskCloned.subtasks.splice(i, 1);
-    setTask(taskCloned);
+    let subtaskList = [...task.subtasks];
+    subtaskList.splice(i, 1);
+    setTask({...task, subtasks: subtaskList});
   };
 
   const setDescription = (description: string) => {
@@ -132,11 +132,6 @@ export default function EditTaskModal({
       return;
     }
     let taskUpdated = setTime(task, date, "startTime");
-    console.log(
-      date.millisecond() > task.endTime,
-      date.valueOf(),
-      task.endTime,
-    );
     if (date.valueOf() > task.endTime) {
       taskUpdated = setTime(taskUpdated, date, "endTime");
     }
@@ -227,7 +222,7 @@ export default function EditTaskModal({
                 onChange={(e) => setTaskName(e.target.value)}
               ></input>
             </div>
-            <div className="inline-flex gap-1 pb-2">
+            <div className="inline-flex gap-1 pb-2 relative">
               <>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
