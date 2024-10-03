@@ -1,30 +1,16 @@
-import { Task } from "@/types/task";
-import { initializeApp } from "firebase/app";
 import {
   addDoc,
   collection,
   deleteDoc,
   doc,
   getDocs,
-  getFirestore,
   query,
   setDoc,
   Timestamp,
   where,
 } from "firebase/firestore";
-
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import { auth, db } from "@/firebase/firebase";
+import { Task } from "@/types/task";
 const tasks = collection(db, "task");
 
 const getTaskByDate = async (date: Date): Promise<Task[]> => {
@@ -40,7 +26,7 @@ const getTaskByDate = async (date: Date): Promise<Task[]> => {
       where("startTime", "<", Timestamp.fromDate(dateAfter).seconds * 1000),
     );
     const tasksSnapshotWithCurrentDateQuery = getDocs(q);
-    const taskList: Task[] = (await tasksSnapshotWithCurrentDateQuery).docs.map(
+    let taskList: Task[] = (await tasksSnapshotWithCurrentDateQuery).docs.map(
       (doc) => ({
         id: doc.id,
         name: doc.data()["name"],
@@ -49,7 +35,11 @@ const getTaskByDate = async (date: Date): Promise<Task[]> => {
         checked: doc.data()["checked"],
         description: doc.data()["description"],
         subtasks: doc.data()["subtasks"],
+        userId: doc.data()["userId"],
       }),
+    );
+    taskList = taskList.filter(
+      (task) => task?.userId === auth.currentUser?.uid,
     );
     taskList.sort((task1, task2) => task1.startTime - task2.startTime);
     return taskList;

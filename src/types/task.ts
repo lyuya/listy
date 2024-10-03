@@ -6,6 +6,7 @@ export interface Task {
   description: string;
   checked: boolean;
   subtasks: Subtask[];
+  userId: string;
 }
 export interface Subtask {
   name: string;

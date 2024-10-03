@@ -21,6 +21,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import DeleteConfirmationModal from "../deleteConfirmation/DeleteConfirmationModal";
 import styles from "./EditTaskModal.module.css";
+import { auth } from "@/firebase/firebase";
 
 interface EditTaskModalProps {
   task: Task;
@@ -194,10 +195,19 @@ export default function EditTaskModal({
     );
   };
 
+  const setUserId = () => {
+    if (!task.userId && auth.currentUser?.uid) {
+      const taskCloned = { ...task };
+      taskCloned.userId = auth.currentUser?.uid;
+      setTask(taskCloned);
+    }
+  };
+  setUserId();
+
   return (
     <>
       <div
-        className="modal-backdrop"
+        className="modal-backdrop dark"
         onClick={(e) => {
           e.stopPropagation();
           onClose();

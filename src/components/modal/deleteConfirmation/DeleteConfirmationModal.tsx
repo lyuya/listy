@@ -7,7 +7,7 @@ export default function DeleteConfirmationModal({
 }: DeleteConfirmationModalProps) {
   return (
     <>
-      <div className="modal-backdrop" onClick={() => onClose(false)}>
+      <div className="modal-backdrop dark" onClick={() => onClose(false)}>
         <div className="modal-content bg-white">
           <div className="p-2">
             <span>Do you want to delete this task ?</span>

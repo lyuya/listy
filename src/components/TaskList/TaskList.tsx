@@ -12,10 +12,14 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import styles from "./TaskList.module.css";
 import EditTaskModal from "../modal/editTask/EditTaskModal";
 import EditCalendarOutlinedIcon from "@mui/icons-material/EditCalendarOutlined";
+import { isUserConnected, login } from "@/api/auth.service";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import SettingModal from "../modal/setting/settingModal";
 
 export default function TaskList() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
+  const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [taskIndex, setTaskIndex] = useState<number>();
   const [loading, setLoading] = useState(true);
   const [date, setDate] = useState<Date>(new Date());
@@ -33,6 +37,7 @@ export default function TaskList() {
     description: "",
     checked: false,
     subtasks: [],
+    userId: "",
   };
   const addOneDay = () => {
     let _date = new Date(date);
@@ -77,8 +82,20 @@ export default function TaskList() {
     setIsEditTaskOpen(true);
   };
 
+  const openSettingModal = () => {
+    setIsSettingOpen(true);
+  };
+
+  const closeSettingModal = () => {
+    setIsSettingOpen(false);
+  };
+
   const getTasks = async () => {
     try {
+      const auth = isUserConnected();
+      if (auth) {
+        // TODO load task with id of current user
+      }
       const taskData = await getTaskByDate(date);
       dispatch(loadTasksReducer(taskData));
       setLoading(false);
@@ -122,9 +139,12 @@ export default function TaskList() {
               &#10095;
             </button>
           </div>
-          <div className="m-4">
+          <div className="m-4 flex gap-2">
             <button className="text-amber-600" onClick={openCalendarModal}>
               <EditCalendarOutlinedIcon fontSize="medium"></EditCalendarOutlinedIcon>
+            </button>
+            <button className="text-amber-600" onClick={openSettingModal}>
+              <SettingsOutlinedIcon></SettingsOutlinedIcon>
             </button>
           </div>
           {isCalendarOpen && (
@@ -133,6 +153,9 @@ export default function TaskList() {
               onClose={closeCalendarModal}
               onDateChange={onDateChange}
             />
+          )}
+          {isSettingOpen && (
+            <SettingModal onClose={closeSettingModal}></SettingModal>
           )}
         </div>
       </header>
@@ -146,7 +169,7 @@ export default function TaskList() {
                 );
                 const endTimeToDisplay = dayjs(task.endTime).format("HH:mm");
                 return (
-                  <li className="inline-flex w-full">
+                  <li className="inline-flex w-full" key={i}>
                     <div className="inline-flex">
                       <span className="my-auto px-5 text-gray-500">
                         {startTimeToDisplay}

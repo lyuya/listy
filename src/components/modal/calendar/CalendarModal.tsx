@@ -26,22 +26,24 @@ const CalendarModal = ({
   const _defaultDate = useMemo(() => dayjs(defaultDate), [defaultDate]);
 
   return (
-    <div className="modal right-[60px]" onClick={handleCloseClick}>
-      <div
-        className="modal-content bg-white"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <button className="modal-close" onClick={onClose}>
-          &times;
-        </button>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateCalendar
-            slotProps={customDatePicker}
-            value={_defaultDate}
-            views={["year", "month", "day"]}
-            onChange={onDateChange}
-          />
-        </LocalizationProvider>
+    <div className="modal-backdrop" onClick={handleCloseClick}>
+      <div className="modal right-[100px]">
+        <div
+          className="modal-content bg-white"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <button className="modal-close" onClick={onClose}>
+            &times;
+          </button>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateCalendar
+              slotProps={customDatePicker}
+              value={_defaultDate}
+              views={["year", "month", "day"]}
+              onChange={onDateChange}
+            />
+          </LocalizationProvider>
+        </div>
       </div>
     </div>
   );
