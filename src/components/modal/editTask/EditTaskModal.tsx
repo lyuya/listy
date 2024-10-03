@@ -10,6 +10,7 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { Subtask, Task } from "@/types/task";
 import {
+  customCssTextField,
   customDatePicker,
   customDigitalClockSectionItem,
 } from "@/styles/CustomStyle";
@@ -18,7 +19,8 @@ import { useDispatch } from "react-redux";
 import { toggleTaskReducer } from "@/store/taskSlice";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import DeleteConfirmationModal from "../deleteConfirmation/DeleteConfirmationModal";
+import styles from "./EditTaskModal.module.css";
 
 interface EditTaskModalProps {
   task: Task;
@@ -202,21 +204,21 @@ export default function EditTaskModal({
         }}
       >
         <div
-          className="modal-content w-3/6 bg-[#e0ebd6]"
+          className="modal-content w-3/6 bg-white"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="border-b-1">
-            <span className="font-bold text-matcha text-xl">
+            <span className="font-bold text-amber-600 text-xl">
               {task.id ? "Edit task" : "New task"}
             </span>
             <button className="modal-close" onClick={onClose}>
               &times;
             </button>
           </div>
-          <div className="bg-[#e0ebd6] py-5">
+          <div className="bg-transparent py-5">
             <div className="pb-2">
               <input
-                className="appearance-none border-2 border-gray-200 rounded-md w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white"
+                className="appearance-none border border-gray-200 rounded-md w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white"
                 placeholder="Task name"
                 value={task.name}
                 onChange={(e) => setTaskName(e.target.value)}
@@ -226,36 +228,40 @@ export default function EditTaskModal({
               <>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
+                    className="focus:outline-none hover:outline-none"
                     value={startDate}
                     slotProps={{
                       ...customDatePicker,
                       textField: { size: "small" },
                     }}
+                    sx={{ ...customCssTextField }}
                     onChange={(date) => setTaskDate(date)}
                   />
                   <TimePicker
                     value={startDate}
                     slotProps={{
+                      ...customDigitalClockSectionItem,
                       textField: { size: "small" },
                       actionBar: { actions: [] },
                     }}
                     onChange={(date) => setStartTime(date)}
+                    sx={{ ...customCssTextField }}
                   />
                   <div className="my-auto">
                     <ArrowForwardIcon></ArrowForwardIcon>
                   </div>
                   <TimePicker
+                    className="picker"
                     value={finishedDate}
                     slotProps={{
+                      ...customDigitalClockSectionItem,
                       textField: { size: "small" },
                       actionBar: { actions: [] },
-                      digitalClockSectionItem: {
-                        ...customDigitalClockSectionItem,
-                      },
                     }}
                     onChange={(date) => {
                       setEndTime(date);
                     }}
+                    sx={{ ...customCssTextField }}
                   />
                 </LocalizationProvider>
               </>
@@ -266,15 +272,15 @@ export default function EditTaskModal({
                 {((task.endTime - task.startTime) / 60000) % 60} minutes
               </p>
             </div>
-            <div className="min-h-40 grid grid-cols-2 divide-x divide-white ">
+            <div className="min-h-40 grid grid-cols-2 ">
               <div className="w-full">
                 <div className="w-full p-3 inline-flex justify-between">
-                  <span className="font-bold text-matcha items-center flex">
+                  <span className="font-bold text-amber-600 items-center flex">
                     Subtasks
                   </span>
                   &ensp;
                   <button
-                    className="px-3 py-1 h-fit bg-matcha text-white rounded-full text-sm"
+                    className="px-3 py-1 h-fit bg-amber-600 text-white rounded-full text-sm"
                     onClick={createNewSubtask}
                   >
                     + add a subtask
@@ -283,30 +289,31 @@ export default function EditTaskModal({
                 <ul className="p-3">
                   {task.subtasks.map((subtask, i) => (
                     <li key={i}>
-                      <div className="w-full flex justify-between">
-                        <div>
-                          <input
-                            checked={subtask.checked}
-                            onChange={(e) => setSubtaskChecked(e, i)}
-                            className="accent-green-700 mr-2"
-                            type="checkbox"
-                          />
-                          <input
-                            value={subtask.name}
-                            onChange={(e) => setSubtaskName(e, i)}
-                            className="appearance-none border-2 border-gray-200 rounded-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white"
-                          ></input>
+                      <div className="">
+                        <div className="w-full flex rounded-md border border-amber-600 mb-2 px-2">
+                          <div className="flex relative w-full">
+                            <input
+                              checked={subtask.checked}
+                              onChange={(e) => setSubtaskChecked(e, i)}
+                              className="accent-amber-600 mr-2"
+                              type="checkbox"
+                            />
+                            <input
+                              value={subtask.name}
+                              onChange={(e) => setSubtaskName(e, i)}
+                              className={
+                                "appearance-none w-full py-1 px-1 leading-tight focus:outline-none focus:bg-white" +
+                                (subtask.checked ? styles.done : "")
+                              }
+                            ></input>
+                          </div>
+                          <button
+                            className="rounded-full text-amber-600 hover:bg-amber-50 p-1 w-8"
+                            onClick={() => deleteSubtask(i)}
+                          >
+                            <DeleteOutlineIcon fontSize="small"></DeleteOutlineIcon>
+                          </button>
                         </div>
-
-                        <button
-                          className="rounded-full text-white py-1 px-1 my-auto"
-                          onClick={() => deleteSubtask(i)}
-                        >
-                          <DeleteOutlineIcon
-                            fontSize="small"
-                            sx={{ color: "var(--matcha)" }}
-                          ></DeleteOutlineIcon>
-                        </button>
                       </div>
                     </li>
                   ))}
@@ -325,22 +332,25 @@ export default function EditTaskModal({
           </div>
           <div>
             <div className="flex justify-between">
-              <div className="flex gap-2">
-                <button onClick={setTaskChecked}>
-                  {checked && (
-                    <TaskAltIcon sx={{ color: "var(--matcha)" }}></TaskAltIcon>
-                  )}
-                  {!checked && (
-                    <RadioButtonUncheckedIcon
-                      sx={{ color: "var(--matcha)" }}
-                    ></RadioButtonUncheckedIcon>
-                  )}
-                </button>
-                <button onClick={openDeleteConfirmationModal}>
-                  <DeleteOutlineIcon
-                    sx={{ color: "var(--matcha)" }}
-                  ></DeleteOutlineIcon>
-                </button>
+              <div>
+                <div className="flex gap-2 text-amber-600">
+                  <button
+                    className="hover:bg-amber-50 rounded-full p-2"
+                    onClick={setTaskChecked}
+                  >
+                    {checked && <TaskAltIcon></TaskAltIcon>}
+                    {!checked && (
+                      <RadioButtonUncheckedIcon></RadioButtonUncheckedIcon>
+                    )}
+                  </button>
+                  <button
+                    className="hover:bg-amber-50 rounded-full p-2"
+                    onClick={openDeleteConfirmationModal}
+                  >
+                    <DeleteOutlineIcon></DeleteOutlineIcon>
+                  </button>
+                </div>
+
                 {isDeleteConfirmationModalVisible && (
                   <DeleteConfirmationModal
                     onClose={deleteCurrentTask}
@@ -349,7 +359,7 @@ export default function EditTaskModal({
               </div>
               <div className="flex items-end gap-1">
                 <button
-                  className="px-3 py-1 bg-matcha text-white rounded-md"
+                  className="px-3 py-1 bg-amber-600 text-white rounded-md"
                   onClick={(e) => {
                     e.stopPropagation();
                     onClose();
@@ -358,7 +368,7 @@ export default function EditTaskModal({
                   cancel
                 </button>
                 <button
-                  className="px-3 py-1 bg-matcha text-white rounded-md"
+                  className="px-3 py-1 bg-amber-600 text-white rounded-md"
                   onClick={(e) => {
                     e.stopPropagation();
                     saveNewTask(task);

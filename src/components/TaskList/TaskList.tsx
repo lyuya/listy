@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import EditTaskModal from "@/components/EditTaskModal";
-import CalendarModal from "@/components/CalendarModal";
+import CalendarModal from "@/components/modal/calendar/CalendarModal";
 import { getTaskByDate, updateTask } from "@/api/task.service";
 import { useDispatch } from "react-redux";
 import { loadTasksReducer, toggleTaskReducer } from "@/store/taskSlice";
@@ -10,8 +9,11 @@ import { Task } from "@/types/task";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import styles from "./TaskList.module.css";
+import EditTaskModal from "../modal/editTask/EditTaskModal";
+import EditCalendarOutlinedIcon from "@mui/icons-material/EditCalendarOutlined";
 
-export default function TasksList() {
+export default function TaskList() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
   const [taskIndex, setTaskIndex] = useState<number>();
@@ -109,20 +111,20 @@ export default function TasksList() {
       <header>
         <div className="inline-flex w-full justify-between px-8">
           <div className="text-2xl p-5">
-            <button className="text-matcha px-2" onClick={minusOneDay}>
+            <button className="text-amber-600 px-2" onClick={minusOneDay}>
               &#10094;
             </button>
             {date.toLocaleString("default", { month: "long" })}
             &ensp;
             {date.getDate().toLocaleString()}
-            <span className="text-matcha px-2">{date.getFullYear()}</span>
-            <button className="text-matcha pr-2" onClick={addOneDay}>
+            <span className="text-amber-600 px-2">{date.getFullYear()}</span>
+            <button className="text-amber-600 pr-2" onClick={addOneDay}>
               &#10095;
             </button>
           </div>
           <div className="m-4">
-            <button onClick={openCalendarModal}>
-              <img className="h-8 w-8" src="schedule.png"></img>
+            <button className="text-amber-600" onClick={openCalendarModal}>
+              <EditCalendarOutlinedIcon fontSize="medium"></EditCalendarOutlinedIcon>
             </button>
           </div>
           {isCalendarOpen && (
@@ -143,13 +145,21 @@ export default function TasksList() {
               return (
                 <div
                   key={i}
-                  className="rounded-lg bg-stone-100	box-border h-130 w-500 p-4 border-2 m-4"
+                  className="rounded-lg bg-amber-100 h-130 w-500 py-3 px-4 my-3 mx-4"
                   onClick={() => openEditTaskModal(i)}
                 >
                   <div className="flex justify-between">
                     <div>
-                      <div className="pb-2 font-semibold">{task.name}</div>
-                      <div className="inline-flex text-sm text-matcha">
+                      <div className={task.checked ? styles.done : ""}>
+                        <span
+                          className={
+                            styles.label + " text-amber-700 font-semibold"
+                          }
+                        >
+                          {task.name}
+                        </span>
+                      </div>
+                      <div className="inline-flex text-sm text-amber-600">
                         {startTimeToDisplay}
                         <div className="flex my-auto">
                           <ArrowForwardIcon fontSize="small"></ArrowForwardIcon>
@@ -162,23 +172,24 @@ export default function TasksList() {
                         minutes )
                       </div>
                     </div>
-
-                    <button
+                    <div
                       onClick={(e) => {
                         e.stopPropagation();
-                        setOneTaskChecked(i);
                       }}
                     >
-                      {task.checked ? (
-                        <CheckBoxIcon
-                          sx={{ color: "var(--matcha)" }}
-                        ></CheckBoxIcon>
-                      ) : (
-                        <CheckBoxOutlineBlankIcon
-                          sx={{ color: "var(--matcha)" }}
-                        ></CheckBoxOutlineBlankIcon>
-                      )}
-                    </button>
+                      <button
+                        className="text-amber-700"
+                        onClick={() => {
+                          setOneTaskChecked(i);
+                        }}
+                      >
+                        {task.checked ? (
+                          <CheckBoxIcon></CheckBoxIcon>
+                        ) : (
+                          <CheckBoxOutlineBlankIcon></CheckBoxOutlineBlankIcon>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -186,9 +197,9 @@ export default function TasksList() {
           </div>
           <div>
             <div></div>
-            <div className="rounded-lg bg-stone-100	box-border h-130 w-500 p-4 border-2 m-4">
-              <p className="font-semibold">Task Summary</p>
-              <ul>
+            <div className="rounded-lg bg-amber-100	box-border h-130 w-500 py-3 px-4 my-3 mx-4">
+              <p className="font-semibold text-amber-700">Task Summary</p>
+              <ul className="text-amber-600 text-sm font-medium">
                 <li className="flex justify-between">
                   <span>Total time</span>
                   <span>{tasks.length}</span>
@@ -208,10 +219,10 @@ export default function TasksList() {
           </div>
         </div>
       </div>
-      <footer className="fixed w-full bottom-10">
+      <footer className="fixed bottom-10 right-4">
         <div className="px-8 float-right	">
           <button
-            className="bg-lime-800 rounded-full text-white text-2xl py-2 px-4 text-2xl w-12 h-12 p-auto"
+            className="bg-amber-600 rounded-full text-white text-2xl py-2 px-4 text-2xl w-12 h-12 p-auto"
             onClick={createNewTask}
           >
             +

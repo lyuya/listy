@@ -17,13 +17,13 @@ export default function DeleteConfirmationModal({
             <div className="flex gap-2">
               <button
                 onClick={() => onClose(false)}
-                className="px-3 py-1 bg-matcha text-white rounded-md"
+                className="px-3 py-1 bg-amber-600 text-white rounded-md"
               >
                 No
               </button>
               <button
                 onClick={() => onClose(true)}
-                className="px-3 py-1 bg-matcha text-white rounded-md"
+                className="px-3 py-1 bg-amber-600 text-white rounded-md"
               >
                 Yes
               </button>

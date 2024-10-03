@@ -1,0 +1,25 @@
+@keyframes strikeitem {
+  to {
+    width: calc(100% + 1rem);
+  }
+}
+
+.label {
+  position: relative;
+  transition: opacity 0.2s linear;
+}
+.done .label {
+  opacity: 0.6;
+}
+
+.done .label::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -0.5rem;
+  display: block;
+  width: 0%;
+  height: 1px;
+  background: white;
+  animation: strikeitem 0.3s ease-out 0s forwards;
+}

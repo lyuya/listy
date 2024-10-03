@@ -1,13 +1,11 @@
 import React from "react";
-import StoreProvider from "@/components/StoreProvider";
-import TasksList from "../components/TasksList";
+import TaskList from "../components/TaskList/TaskList";
+import StoreProvider from "@/components/storeProvider/StoreProvider";
 
 export default function Home() {
   return (
-    <>
-      <StoreProvider>
-        <TasksList></TasksList>
-      </StoreProvider>
-    </>
+    <StoreProvider>
+      <TaskList></TaskList>
+    </StoreProvider>
   );
 }
