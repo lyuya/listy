@@ -136,64 +136,77 @@ export default function TaskList() {
           )}
         </div>
       </header>
-      <div className="p-4">
+      <div className="py-4 px-8">
         <div className="grid grid-cols-3 gap-4 ">
           <div className="col-span-2" id="taskList">
-            {tasks.map((task, i) => {
-              const startTimeToDisplay = dayjs(task.startTime).format("HH:mm");
-              const endTimeToDisplay = dayjs(task.endTime).format("HH:mm");
-              return (
-                <div
-                  key={i}
-                  className="rounded-lg bg-amber-100 h-130 w-500 py-3 px-4 my-3 mx-4"
-                  onClick={() => openEditTaskModal(i)}
-                >
-                  <div className="flex justify-between">
-                    <div>
-                      <div className={task.checked ? styles.done : ""}>
-                        <span
-                          className={
-                            styles.label + " text-amber-700 font-semibold"
-                          }
-                        >
-                          {task.name}
-                        </span>
-                      </div>
-                      <div className="inline-flex text-sm text-amber-600">
+            <ul>
+              {tasks.map((task, i) => {
+                const startTimeToDisplay = dayjs(task.startTime).format(
+                  "HH:mm",
+                );
+                const endTimeToDisplay = dayjs(task.endTime).format("HH:mm");
+                return (
+                  <li className="inline-flex w-full">
+                    <div className="inline-flex">
+                      <span className="my-auto px-5 text-gray-500">
                         {startTimeToDisplay}
-                        <div className="flex my-auto">
-                          <ArrowForwardIcon fontSize="small"></ArrowForwardIcon>
-                        </div>
-                        {endTimeToDisplay} ({" "}
-                        {Math.floor(
-                          (task.endTime - task.startTime) / 60000 / 60,
-                        )}{" "}
-                        hours {((task.endTime - task.startTime) / 60000) % 60}{" "}
-                        minutes )
-                      </div>
+                      </span>
+                      <label className={styles.timelineItem}></label>
                     </div>
                     <div
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
+                      key={i}
+                      className="rounded-lg bg-amber-100 w-full h-130 w-500 py-3 px-4 my-3 mx-4"
+                      onClick={() => openEditTaskModal(i)}
                     >
-                      <button
-                        className="text-amber-700"
-                        onClick={() => {
-                          setOneTaskChecked(i);
-                        }}
-                      >
-                        {task.checked ? (
-                          <CheckBoxIcon></CheckBoxIcon>
-                        ) : (
-                          <CheckBoxOutlineBlankIcon></CheckBoxOutlineBlankIcon>
-                        )}
-                      </button>
+                      <div className="flex justify-between">
+                        <div>
+                          <div className={task.checked ? styles.done : ""}>
+                            <span
+                              className={
+                                styles.label + " text-amber-700 font-semibold"
+                              }
+                            >
+                              {task.name}
+                            </span>
+                          </div>
+                          <div className="inline-flex text-sm text-amber-600">
+                            {startTimeToDisplay}
+                            <div className="flex my-auto">
+                              <ArrowForwardIcon fontSize="small"></ArrowForwardIcon>
+                            </div>
+                            {endTimeToDisplay} ({" "}
+                            {Math.floor(
+                              (task.endTime - task.startTime) / 60000 / 60,
+                            )}{" "}
+                            hours{" "}
+                            {((task.endTime - task.startTime) / 60000) % 60}{" "}
+                            minutes )
+                          </div>
+                        </div>
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          <button
+                            className="text-amber-700"
+                            onClick={() => {
+                              setOneTaskChecked(i);
+                            }}
+                          >
+                            {task.checked ? (
+                              <CheckBoxIcon></CheckBoxIcon>
+                            ) : (
+                              <CheckBoxOutlineBlankIcon></CheckBoxOutlineBlankIcon>
+                            )}
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
+                  </li>
+                );
+              })}
+            </ul>
           </div>
           <div>
             <div></div>
