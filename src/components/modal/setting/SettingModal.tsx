@@ -10,7 +10,7 @@ interface SettingModalProps {
 
 export default function SettingModal({ onClose }: SettingModalProps) {
   const dispatch = useDispatch();
-  let [user, setUser] = useState(auth.currentUser);
+  const [user, setUser] = useState(auth.currentUser);
 
   const handleCloseClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,

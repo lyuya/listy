@@ -32,10 +32,12 @@ export default function EditTaskModal({
   task: initialTask,
   onClose,
 }: EditTaskModalProps) {
-  let [task, setTask] = useState({ ...initialTask });
-  let [checked, setChecked] = useState(initialTask.checked);
-  let [isDeleteConfirmationModalVisible, setisDeleteConfirmationModalVisible] =
-    useState<boolean>(false);
+  const [task, setTask] = useState({ ...initialTask });
+  const [checked, setChecked] = useState(initialTask.checked);
+  const [
+    isDeleteConfirmationModalVisible,
+    setisDeleteConfirmationModalVisible,
+  ] = useState<boolean>(false);
   dayjs.extend(utc);
   dayjs.extend(timezone);
   const dispatch = useDispatch();
@@ -59,7 +61,7 @@ export default function EditTaskModal({
   };
 
   const createNewSubtask = () => {
-    let newSubtask: Subtask = {
+    const newSubtask: Subtask = {
       name: "",
       checked: false,
     };
@@ -72,7 +74,7 @@ export default function EditTaskModal({
       ...task.subtasks[i],
       name: e.target.value,
     };
-    let subtaskList = [...task.subtasks];
+    const subtaskList = [...task.subtasks];
     subtaskList[i] = subtask;
     setTask({ ...task, subtasks: subtaskList });
   };
@@ -82,13 +84,13 @@ export default function EditTaskModal({
       ...task.subtasks[i],
       checked: e.target.checked,
     };
-    let subtaskList = [...task.subtasks];
+    const subtaskList = [...task.subtasks];
     subtaskList[i] = subtask;
     setTask({ ...task, subtasks: subtaskList });
   };
 
   const deleteSubtask = (i: number) => {
-    let subtaskList = [...task.subtasks];
+    const subtaskList = [...task.subtasks];
     subtaskList.splice(i, 1);
     setTask({ ...task, subtasks: subtaskList });
   };
@@ -104,8 +106,8 @@ export default function EditTaskModal({
       return;
     }
     const taskCloned = { ...task };
-    let dateWithStartTimeUpdated = new Date(taskCloned.startTime);
-    let dateWithEndTimeUpdated = new Date(taskCloned.endTime);
+    const dateWithStartTimeUpdated = new Date(taskCloned.startTime);
+    const dateWithEndTimeUpdated = new Date(taskCloned.endTime);
     dateWithStartTimeUpdated.setFullYear(
       date.year(),
       date.month(),
@@ -124,7 +126,7 @@ export default function EditTaskModal({
     field: "startTime" | "endTime",
   ) => {
     const taskCloned = { ...task };
-    let dateWithTimeUpdated = new Date(taskCloned[field]);
+    const dateWithTimeUpdated = new Date(taskCloned[field]);
     dateWithTimeUpdated.setHours(newTime.hour(), newTime.minute(), 0, 0);
     taskCloned[field] = dateWithTimeUpdated.getTime();
     return taskCloned;
@@ -164,7 +166,7 @@ export default function EditTaskModal({
     initialTaskCloned.checked = !initialTaskCloned.checked;
     setChecked(initialTaskCloned.checked);
     // update also the new value of checked in task state
-    let taskCloned = { ...task };
+    const taskCloned = { ...task };
     taskCloned.checked = initialTaskCloned.checked;
     setTask(taskCloned);
 

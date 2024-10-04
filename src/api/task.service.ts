@@ -15,9 +15,9 @@ const tasks = collection(db, "task");
 
 const getTaskByDate = async (date: Date): Promise<Task[]> => {
   try {
-    let dateBefore = new Date(date);
+    const dateBefore = new Date(date);
     dateBefore.setHours(0, 0, 0, 0);
-    let dateAfter = new Date(date);
+    const dateAfter = new Date(date);
     dateAfter.setHours(23, 59, 59, 999);
 
     const q = query(

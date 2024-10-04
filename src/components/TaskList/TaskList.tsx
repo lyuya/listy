@@ -12,7 +12,6 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import styles from "./TaskList.module.css";
 import EditTaskModal from "../modal/editTask/EditTaskModal";
 import EditCalendarOutlinedIcon from "@mui/icons-material/EditCalendarOutlined";
-import { isUserConnected, login } from "@/api/auth.service";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import SettingModal from "../modal/setting/settingModal";
 
@@ -40,13 +39,13 @@ export default function TaskList() {
     userId: "",
   };
   const addOneDay = () => {
-    let _date = new Date(date);
+    const _date = new Date(date);
     _date.setDate(date.getDate() + 1);
     setDate(_date);
   };
 
   const minusOneDay = () => {
-    let _date = new Date(date);
+    const _date = new Date(date);
     _date.setDate(date.getDate() - 1);
     setDate(_date);
   };
@@ -92,10 +91,6 @@ export default function TaskList() {
 
   const getTasks = async () => {
     try {
-      const auth = isUserConnected();
-      if (auth) {
-        // TODO load task with id of current user
-      }
       const taskData = await getTaskByDate(date);
       dispatch(loadTasksReducer(taskData));
       setLoading(false);
