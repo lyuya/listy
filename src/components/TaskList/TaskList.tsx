@@ -14,16 +14,22 @@ import EditTaskModal from "../modal/editTask/EditTaskModal";
 import EditCalendarOutlinedIcon from "@mui/icons-material/EditCalendarOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import SettingModal from "@/components/modal/setting/SettingModal";
+import { auth } from "@/firebase/firebase";
+import AskForLoginModal from "../modal/login/AskForLoginModal";
 
 export default function TaskList() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [taskIndex, setTaskIndex] = useState<number>();
   const [loading, setLoading] = useState(true);
   const [date, setDate] = useState<Date>(new Date());
   const dispatch = useDispatch();
+
   const tasks = useAppSelector((state) => state.task.value);
+  const user = useAppSelector((state) => state.user.value);
+
   const nextRoundedTime = (date: Date) => {
     date.setHours(date.getHours() + 1);
     date.setMinutes(0, 0, 0);
@@ -74,11 +80,26 @@ export default function TaskList() {
   };
 
   const createNewTask = () => {
-    openCreateTaskModal();
+    if (user?.uid) {
+      openCreateTaskModal();
+    } else if (auth.currentUser?.uid) {
+      dispatch(loadTasksReducer(auth.currentUser));
+      openCreateTaskModal();
+    } else {
+      openLoginModal();
+    }
   };
 
   const openCreateTaskModal = () => {
     setIsEditTaskOpen(true);
+  };
+
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const closeAskForLoginModal = () => {
+    setIsLoginModalOpen(false);
   };
 
   const openSettingModal = () => {
@@ -90,6 +111,7 @@ export default function TaskList() {
   };
 
   const getTasks = async () => {
+    setLoading(true);
     try {
       const taskData = await getTaskByDate(date);
       dispatch(loadTasksReducer(taskData));
@@ -113,7 +135,7 @@ export default function TaskList() {
 
   useEffect(() => {
     getTasks();
-  }, [date]);
+  }, [date, user]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -264,6 +286,9 @@ export default function TaskList() {
             onClose={closeEditTaskModal}
             task={taskIndex !== undefined ? tasks[taskIndex] : defaultTask}
           ></EditTaskModal>
+        )}
+        {isLoginModalOpen && (
+          <AskForLoginModal onClose={closeAskForLoginModal}></AskForLoginModal>
         )}
       </footer>
     </>
