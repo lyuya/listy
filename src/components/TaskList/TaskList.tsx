@@ -23,7 +23,6 @@ export default function TaskList() {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [taskIndex, setTaskIndex] = useState<number>();
-  const [loading, setLoading] = useState(true);
   const [date, setDate] = useState<Date>(new Date());
   const dispatch = useDispatch();
 
@@ -111,14 +110,11 @@ export default function TaskList() {
   };
 
   const getTasks = async () => {
-    setLoading(true);
     try {
       const taskData = await getTaskByDate(date);
       dispatch(loadTasksReducer(taskData));
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching tasks: ", error);
-      setLoading(false);
     }
   };
 
@@ -136,10 +132,7 @@ export default function TaskList() {
   useEffect(() => {
     getTasks();
   }, [date, user]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  
   return (
     <>
       <header>
