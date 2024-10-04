@@ -38,6 +38,10 @@ export default function EditTaskModal({
     isDeleteConfirmationModalVisible,
     setisDeleteConfirmationModalVisible,
   ] = useState<boolean>(false);
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
+  const [startTimePickerOpen, setStartTimePickerOpen] = useState(false);
+  const [endTimePickerOpen, setEndTimePickerOpen] = useState(false);
+
   dayjs.extend(utc);
   dayjs.extend(timezone);
   const dispatch = useDispatch();
@@ -217,7 +221,12 @@ export default function EditTaskModal({
       >
         <div
           className="modal-content w-3/6 bg-white"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            setDatePickerOpen(false);
+            setStartTimePickerOpen(false);
+            setEndTimePickerOpen(false);
+          }}
         >
           <div className="border-b-1">
             <span className="font-bold text-amber-600 text-xl">
@@ -239,42 +248,70 @@ export default function EditTaskModal({
             <div className="inline-flex gap-1 pb-2 relative">
               <>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    className="focus:outline-none hover:outline-none"
-                    value={startDate}
-                    slotProps={{
-                      ...customDatePicker,
-                      textField: { size: "small" },
-                    }}
-                    sx={{ ...customCssTextField }}
-                    onChange={(date) => setTaskDate(date)}
-                  />
-                  <TimePicker
-                    value={startDate}
-                    slotProps={{
-                      ...customDigitalClockSectionItem,
-                      textField: { size: "small" },
-                      actionBar: { actions: [] },
-                    }}
-                    onChange={(date) => setStartTime(date)}
-                    sx={{ ...customCssTextField }}
-                  />
+                  <div onClick={(e) => e.stopPropagation()}>
+                    <DatePicker
+                      open={datePickerOpen}
+                      onOpen={() => {
+                        setDatePickerOpen(true);
+                        setEndTimePickerOpen(false);
+                        setStartTimePickerOpen(false);
+                      }}
+                      onClose={() => setDatePickerOpen(false)}
+                      value={startDate}
+                      slotProps={{
+                        ...customDatePicker,
+                        textField: { size: "small" },
+                      }}
+                      sx={{ ...customCssTextField }}
+                      onChange={(date) => setTaskDate(date)}
+                    />
+                  </div>
+                  <div onClick={(e) => e.stopPropagation()}>
+                    <TimePicker
+                      value={startDate}
+                      open={startTimePickerOpen}
+                      onOpen={() => {
+                        setStartTimePickerOpen(true);
+                        setEndTimePickerOpen(false);
+                        setDatePickerOpen(false);
+                      }}
+                      onClose={() => setStartTimePickerOpen(false)}
+                      ampm={false}
+                      slotProps={{
+                        ...customDigitalClockSectionItem,
+                        textField: { size: "small" },
+                        actionBar: { actions: [] },
+                      }}
+                      onChange={(date) => setStartTime(date)}
+                      sx={{ ...customCssTextField }}
+                    />
+                  </div>
                   <div className="my-auto">
                     <ArrowForwardIcon></ArrowForwardIcon>
                   </div>
-                  <TimePicker
-                    className="picker"
-                    value={finishedDate}
-                    slotProps={{
-                      ...customDigitalClockSectionItem,
-                      textField: { size: "small" },
-                      actionBar: { actions: [] },
-                    }}
-                    onChange={(date) => {
-                      setEndTime(date);
-                    }}
-                    sx={{ ...customCssTextField }}
-                  />
+                  <div onClick={(e) => e.stopPropagation()}>
+                    <TimePicker
+                      open={endTimePickerOpen}
+                      onOpen={() => {
+                        setEndTimePickerOpen(true);
+                        setStartTimePickerOpen(false);
+                        setDatePickerOpen(false);
+                      }}
+                      onClose={() => setEndTimePickerOpen(false)}
+                      ampm={false}
+                      className="picker"
+                      value={finishedDate}
+                      slotProps={{
+                        ...customDigitalClockSectionItem,
+                        textField: { size: "small" },
+                        actionBar: { actions: [] },
+                      }}
+                      onChange={(date) => {
+                        setEndTime(date);
+                      }}
+                      sx={{ ...customCssTextField }}
+                    />
+                  </div>
                 </LocalizationProvider>
               </>
             </div>

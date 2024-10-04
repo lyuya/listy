@@ -39,9 +39,13 @@ export default function SettingModal({ onClose }: SettingModalProps) {
       <div className="modal right-[70px]" onClick={(e) => e.stopPropagation()}>
         <div className="relative shadow w-36 bg-white rounded-lg">
           <ul className="text-gray-600 place-content-center">
-            <li className="p-3 rounded-t-lg hover:bg-gray-100">
+            <li
+              className={
+                "p-3 rounded-t-lg " + (user ? "" : "hover:bg-gray-100")
+              }
+            >
               {user ? (
-                <span>Hi, {user.displayName}</span>
+                <span>Hi, {user.displayName}!</span>
               ) : (
                 <button className="w-full flex" onClick={onClickLogin}>
                   Login
