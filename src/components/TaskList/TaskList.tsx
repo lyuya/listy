@@ -13,7 +13,7 @@ import styles from "./TaskList.module.css";
 import EditTaskModal from "../modal/editTask/EditTaskModal";
 import EditCalendarOutlinedIcon from "@mui/icons-material/EditCalendarOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import SettingModal from "../modal/setting/settingModal";
+import SettingModal from "@/components/modal/setting/SettingModal";
 
 export default function TaskList() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
