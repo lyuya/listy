@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import CalendarModal from "@/components/modal/calendar/CalendarModal";
-import { getTaskByDate, updateTask } from "@/api/task.service";
+import { getTaskByDate } from "@/api/task.service";
 import { useDispatch } from "react-redux";
-import { loadTasksReducer, toggleTaskReducer } from "@/store/taskSlice";
+import { loadTasksReducer } from "@/store/taskSlice";
 import { useAppSelector } from "@/store/hooks";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import styles from "./TaskList.module.css";
 import EditTaskModal from "../modal/editTask/EditTaskModal";
 import EditCalendarOutlinedIcon from "@mui/icons-material/EditCalendarOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
@@ -16,6 +12,7 @@ import SettingModal from "@/components/modal/setting/SettingModal";
 import { auth } from "@/firebase/firebase";
 import AskForLoginModal from "../modal/login/AskForLoginModal";
 import { User } from "firebase/auth";
+import TaskItem from "../taskItem/TaskItem";
 
 export default function TaskList() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -119,17 +116,6 @@ export default function TaskList() {
     }
   };
 
-  const setOneTaskChecked = (i: number) => {
-    const taskCloned = { ...tasks[i] };
-    taskCloned.checked = !taskCloned.checked;
-    updateTask(taskCloned).then(
-      () => {
-        dispatch(toggleTaskReducer(taskCloned));
-      },
-      (error) => console.error("Error updating task:", error),
-    );
-  };
-
   useEffect(() => {
     setDate(new Date());
     auth.onAuthStateChanged((user) => {
@@ -194,72 +180,13 @@ export default function TaskList() {
           <div className="lg:grid lg:grid-cols-3 lg:gap-4 ">
             <div className="col-span-2" id="taskList">
               <ul>
-                {tasks.map((task, i) => {
-                  const startTimeToDisplay = dayjs(task.startTime).format(
-                    "HH:mm",
-                  );
-                  const endTimeToDisplay = dayjs(task.endTime).format("HH:mm");
-                  return (
-                    <li className="inline-flex w-full" key={i}>
-                      <div className="inline-flex">
-                        <span className="my-auto px-5 text-gray-500">
-                          {startTimeToDisplay}
-                        </span>
-                        <label className={styles.timelineItem}></label>
-                      </div>
-                      <div
-                        key={i}
-                        className="rounded-lg bg-amber-100 w-full h-130 w-500 py-3 px-4 my-3 mx-4"
-                        onClick={() => openEditTaskModal(i)}
-                      >
-                        <div className="flex justify-between">
-                          <div>
-                            <div className={task.checked ? styles.done : ""}>
-                              <span
-                                className={
-                                  styles.label + " text-amber-700 font-semibold"
-                                }
-                              >
-                                {task.name}
-                              </span>
-                            </div>
-                            <div className="inline-flex text-sm text-amber-600">
-                              {startTimeToDisplay}
-                              <div className="flex my-auto">
-                                <ArrowForwardIcon fontSize="small"></ArrowForwardIcon>
-                              </div>
-                              {endTimeToDisplay} ({" "}
-                              {Math.floor(
-                                (task.endTime - task.startTime) / 60000 / 60,
-                              )}{" "}
-                              hours{" "}
-                              {((task.endTime - task.startTime) / 60000) % 60}{" "}
-                              minutes )
-                            </div>
-                          </div>
-                          <div
-                            onClick={(e) => {
-                              e.stopPropagation();
-                            }}
-                          >
-                            <button
-                              className="text-amber-700"
-                              onClick={() => {
-                                setOneTaskChecked(i);
-                              }}
-                            >
-                              {task.checked ? (
-                                <CheckBoxIcon></CheckBoxIcon>
-                              ) : (
-                                <CheckBoxOutlineBlankIcon></CheckBoxOutlineBlankIcon>
-                              )}
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  );
-                })}
+                {tasks.map((task, i) => (
+                  <TaskItem
+                    key={i}
+                    task={task}
+                    openEditTaskModal={() => openEditTaskModal(i)}
+                  ></TaskItem>
+                ))}
               </ul>
             </div>
             <div>
