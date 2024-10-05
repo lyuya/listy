@@ -1,16 +1,12 @@
 import { login, logout } from "@/api/auth.service";
 import { auth } from "@/firebase/firebase";
-import { loadCurrentUserReducer } from "@/store/authSlice";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
 
 interface SettingModalProps {
   onClose: () => void;
 }
 
 export default function SettingModal({ onClose }: SettingModalProps) {
-  const dispatch = useDispatch();
-  const [user, setUser] = useState(auth.currentUser);
+  const user = auth.currentUser;
 
   const handleCloseClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -20,16 +16,12 @@ export default function SettingModal({ onClose }: SettingModalProps) {
   };
   const onClickLogin = () => {
     login().then(() => {
-      setUser(auth.currentUser);
-      dispatch(loadCurrentUserReducer(auth.currentUser));
       onClose();
     });
   };
 
   const onClickLogout = () => {
     logout().then(() => {
-      setUser(null);
-      dispatch(loadCurrentUserReducer(null));
       onClose();
     });
   };

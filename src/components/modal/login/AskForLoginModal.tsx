@@ -1,15 +1,10 @@
 import { login } from "@/api/auth.service";
-import { auth } from "@/firebase/firebase";
-import { loadCurrentUserReducer } from "@/store/authSlice";
-import { useDispatch } from "react-redux";
 
 interface AskForLoginModalProps {
   onClose: () => void;
 }
 
 export default function AskForLoginModal({ onClose }: AskForLoginModalProps) {
-  const dispatch = useDispatch();
-
   const handleCloseClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
@@ -19,7 +14,6 @@ export default function AskForLoginModal({ onClose }: AskForLoginModalProps) {
 
   const onClickLogin = async () => {
     await login();
-    dispatch(loadCurrentUserReducer(auth.currentUser));
   };
   return (
     <>

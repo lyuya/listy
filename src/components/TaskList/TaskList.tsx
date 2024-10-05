@@ -16,6 +16,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import SettingModal from "@/components/modal/setting/SettingModal";
 import { auth } from "@/firebase/firebase";
 import AskForLoginModal from "../modal/login/AskForLoginModal";
+import { User } from "firebase/auth";
 
 export default function TaskList() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -23,11 +24,11 @@ export default function TaskList() {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [taskIndex, setTaskIndex] = useState<number>();
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>();
+  const [user, setUser] = useState<User | null>(null);
   const dispatch = useDispatch();
 
   const tasks = useAppSelector((state) => state.task.value);
-  const user = useAppSelector((state) => state.user.value);
 
   const nextRoundedTime = (date: Date) => {
     date.setHours(date.getHours() + 1);
@@ -43,13 +44,13 @@ export default function TaskList() {
     subtasks: [],
     userId: "",
   };
-  const addOneDay = () => {
+  const addOneDay = (date: Date) => {
     const _date = new Date(date);
     _date.setDate(date.getDate() + 1);
     setDate(_date);
   };
 
-  const minusOneDay = () => {
+  const minusOneDay = (date: Date) => {
     const _date = new Date(date);
     _date.setDate(date.getDate() - 1);
     setDate(_date);
@@ -79,10 +80,7 @@ export default function TaskList() {
   };
 
   const createNewTask = () => {
-    if (user?.uid) {
-      openCreateTaskModal();
-    } else if (auth.currentUser?.uid) {
-      dispatch(loadTasksReducer(auth.currentUser));
+    if (auth.currentUser) {
       openCreateTaskModal();
     } else {
       openLoginModal();
@@ -111,8 +109,12 @@ export default function TaskList() {
 
   const getTasks = async () => {
     try {
-      const taskData = await getTaskByDate(date);
-      dispatch(loadTasksReducer(taskData));
+      if (date) {
+        const taskData = await getTaskByDate(date);
+        dispatch(loadTasksReducer(taskData));
+      } else {
+        throw new Error("Date is not set correctly");
+      }
     } catch (error) {
       console.error("Error fetching tasks: ", error);
     }
@@ -130,22 +132,37 @@ export default function TaskList() {
   };
 
   useEffect(() => {
-    getTasks();
+    setDate(new Date());
+    auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (date) {
+      getTasks();
+    }
   }, [date, user]);
-  
+
   return (
     <>
       <header>
         <div className="inline-flex w-full justify-between px-8">
           <div className="text-2xl p-5">
-            <button className="text-amber-600 px-2" onClick={minusOneDay}>
+            <button
+              className="text-amber-600 px-2"
+              onClick={() => minusOneDay(date!)}
+            >
               &#10094;
             </button>
-            {date.toLocaleString("default", { month: "long" })}
+            {date?.toLocaleString("default", { month: "long" })}
             &ensp;
-            {date.getDate().toLocaleString()}
-            <span className="text-amber-600 px-2">{date.getFullYear()}</span>
-            <button className="text-amber-600 pr-2" onClick={addOneDay}>
+            {date?.getDate().toLocaleString()}
+            <span className="text-amber-600 px-2">{date?.getFullYear()}</span>
+            <button
+              className="text-amber-600 pr-2"
+              onClick={() => addOneDay(date!)}
+            >
               &#10095;
             </button>
           </div>
@@ -159,7 +176,7 @@ export default function TaskList() {
           </div>
           {isCalendarOpen && (
             <CalendarModal
-              defaultDate={date}
+              defaultDate={date!}
               onClose={closeCalendarModal}
               onDateChange={onDateChange}
             />
