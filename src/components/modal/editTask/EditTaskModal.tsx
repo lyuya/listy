@@ -209,7 +209,7 @@ export default function EditTaskModal({
   return (
     <>
       <div
-        className="modal-backdrop dark"
+        className="modal-backdrop dark overflow-auto"
         onClick={(e) => {
           e.stopPropagation();
           onClose();
@@ -232,7 +232,7 @@ export default function EditTaskModal({
               &times;
             </button>
           </div>
-          <div className="bg-transparent py-5">
+          <div className="bg-transparent py-5 max-h-96 overflow-auto">
             <div className="pb-2">
               <input
                 className="appearance-none border border-gray-200 rounded-md w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white"
@@ -317,10 +317,10 @@ export default function EditTaskModal({
                 {((task.endTime - task.startTime) / 60000) % 60} minutes
               </p>
             </div>
-            <div className="min-h-40 grid grid-cols-2 ">
+            <div className="min-h-40 lg:grid lg:grid-cols-2 ">
               <div className="w-full">
                 <div className="w-full p-3 inline-flex justify-between">
-                  <span className="font-bold text-amber-600 items-center flex">
+                  <span className="font-bold text-amber-600 justify-center flex">
                     Subtasks
                   </span>
                   &ensp;

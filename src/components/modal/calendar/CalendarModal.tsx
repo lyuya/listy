@@ -26,8 +26,11 @@ const CalendarModal = ({
   const _defaultDate = useMemo(() => dayjs(defaultDate), [defaultDate]);
 
   return (
-    <div className="modal-backdrop" onClick={handleCloseClick}>
-      <div className="modal right-[100px]">
+    <div
+      className="modal-backdrop sm:bg-transparent dark"
+      onClick={handleCloseClick}
+    >
+      <div className="modal sm:right-[100px]">
         <div
           className="modal-content bg-white"
           onClick={(event) => event.stopPropagation()}

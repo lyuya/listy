@@ -149,153 +149,163 @@ export default function TaskList() {
     }
   }, [date, user]);
 
+  useEffect(() => {
+    if (isCalendarOpen || isEditTaskOpen || isLoginModalOpen || isSettingOpen) {
+      document.body.style.overflow = "hidden";
+    }
+  }, [isCalendarOpen, isEditTaskOpen, isLoginModalOpen, isSettingOpen]);
+
   return (
     <>
-      <header>
-        <div className="inline-flex w-full justify-between px-8">
-          <div className="text-2xl p-5">
-            <button
-              className="text-amber-600 px-2"
-              onClick={() => minusOneDay(date!)}
-            >
-              &#10094;
-            </button>
-            {date?.toLocaleString("default", { month: "long" })}
-            &ensp;
-            {date?.getDate().toLocaleString()}
-            <span className="text-amber-600 px-2">{date?.getFullYear()}</span>
-            <button
-              className="text-amber-600 pr-2"
-              onClick={() => addOneDay(date!)}
-            >
-              &#10095;
-            </button>
+      <div>
+        <header>
+          <div className="inline-flex w-full justify-between lg:px-8 md:px-4">
+            <div className="text-2xl my-auto">
+              <button
+                className="text-amber-600 px-2"
+                onClick={() => minusOneDay(date!)}
+              >
+                &#10094;
+              </button>
+              {date?.toLocaleString("default", { month: "long" })}
+              &ensp;
+              {date?.getDate().toLocaleString()}
+              <span className="text-amber-600 px-2">{date?.getFullYear()}</span>
+              <button
+                className="text-amber-600 pr-2"
+                onClick={() => addOneDay(date!)}
+              >
+                &#10095;
+              </button>
+            </div>
+            <div className="m-4 flex gap-2">
+              <button className="text-amber-600" onClick={openCalendarModal}>
+                <EditCalendarOutlinedIcon fontSize="medium"></EditCalendarOutlinedIcon>
+              </button>
+              <button className="text-amber-600" onClick={openSettingModal}>
+                <SettingsOutlinedIcon></SettingsOutlinedIcon>
+              </button>
+            </div>
           </div>
-          <div className="m-4 flex gap-2">
-            <button className="text-amber-600" onClick={openCalendarModal}>
-              <EditCalendarOutlinedIcon fontSize="medium"></EditCalendarOutlinedIcon>
-            </button>
-            <button className="text-amber-600" onClick={openSettingModal}>
-              <SettingsOutlinedIcon></SettingsOutlinedIcon>
-            </button>
-          </div>
-          {isCalendarOpen && (
-            <CalendarModal
-              defaultDate={date!}
-              onClose={closeCalendarModal}
-              onDateChange={onDateChange}
-            />
-          )}
-          {isSettingOpen && (
-            <SettingModal onClose={closeSettingModal}></SettingModal>
-          )}
-        </div>
-      </header>
-      <div className="py-4 px-8">
-        <div className="grid grid-cols-3 gap-4 ">
-          <div className="col-span-2" id="taskList">
-            <ul>
-              {tasks.map((task, i) => {
-                const startTimeToDisplay = dayjs(task.startTime).format(
-                  "HH:mm",
-                );
-                const endTimeToDisplay = dayjs(task.endTime).format("HH:mm");
-                return (
-                  <li className="inline-flex w-full" key={i}>
-                    <div className="inline-flex">
-                      <span className="my-auto px-5 text-gray-500">
-                        {startTimeToDisplay}
-                      </span>
-                      <label className={styles.timelineItem}></label>
-                    </div>
-                    <div
-                      key={i}
-                      className="rounded-lg bg-amber-100 w-full h-130 w-500 py-3 px-4 my-3 mx-4"
-                      onClick={() => openEditTaskModal(i)}
-                    >
-                      <div className="flex justify-between">
-                        <div>
-                          <div className={task.checked ? styles.done : ""}>
-                            <span
-                              className={
-                                styles.label + " text-amber-700 font-semibold"
-                              }
-                            >
-                              {task.name}
-                            </span>
-                          </div>
-                          <div className="inline-flex text-sm text-amber-600">
-                            {startTimeToDisplay}
-                            <div className="flex my-auto">
-                              <ArrowForwardIcon fontSize="small"></ArrowForwardIcon>
+        </header>
+        <div className="py-4 lg:px-8 md:px-4">
+          <div className="lg:grid lg:grid-cols-3 lg:gap-4 ">
+            <div className="col-span-2" id="taskList">
+              <ul>
+                {tasks.map((task, i) => {
+                  const startTimeToDisplay = dayjs(task.startTime).format(
+                    "HH:mm",
+                  );
+                  const endTimeToDisplay = dayjs(task.endTime).format("HH:mm");
+                  return (
+                    <li className="inline-flex w-full" key={i}>
+                      <div className="inline-flex">
+                        <span className="my-auto px-5 text-gray-500">
+                          {startTimeToDisplay}
+                        </span>
+                        <label className={styles.timelineItem}></label>
+                      </div>
+                      <div
+                        key={i}
+                        className="rounded-lg bg-amber-100 w-full h-130 w-500 py-3 px-4 my-3 mx-4"
+                        onClick={() => openEditTaskModal(i)}
+                      >
+                        <div className="flex justify-between">
+                          <div>
+                            <div className={task.checked ? styles.done : ""}>
+                              <span
+                                className={
+                                  styles.label + " text-amber-700 font-semibold"
+                                }
+                              >
+                                {task.name}
+                              </span>
                             </div>
-                            {endTimeToDisplay} ({" "}
-                            {Math.floor(
-                              (task.endTime - task.startTime) / 60000 / 60,
-                            )}{" "}
-                            hours{" "}
-                            {((task.endTime - task.startTime) / 60000) % 60}{" "}
-                            minutes )
+                            <div className="inline-flex text-sm text-amber-600">
+                              {startTimeToDisplay}
+                              <div className="flex my-auto">
+                                <ArrowForwardIcon fontSize="small"></ArrowForwardIcon>
+                              </div>
+                              {endTimeToDisplay} ({" "}
+                              {Math.floor(
+                                (task.endTime - task.startTime) / 60000 / 60,
+                              )}{" "}
+                              hours{" "}
+                              {((task.endTime - task.startTime) / 60000) % 60}{" "}
+                              minutes )
+                            </div>
                           </div>
-                        </div>
-                        <div
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                        >
-                          <button
-                            className="text-amber-700"
-                            onClick={() => {
-                              setOneTaskChecked(i);
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
                             }}
                           >
-                            {task.checked ? (
-                              <CheckBoxIcon></CheckBoxIcon>
-                            ) : (
-                              <CheckBoxOutlineBlankIcon></CheckBoxOutlineBlankIcon>
-                            )}
-                          </button>
+                            <button
+                              className="text-amber-700"
+                              onClick={() => {
+                                setOneTaskChecked(i);
+                              }}
+                            >
+                              {task.checked ? (
+                                <CheckBoxIcon></CheckBoxIcon>
+                              ) : (
+                                <CheckBoxOutlineBlankIcon></CheckBoxOutlineBlankIcon>
+                              )}
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-          <div>
-            <div></div>
-            <div className="rounded-lg bg-amber-100	box-border h-130 w-500 py-3 px-4 my-3 mx-4">
-              <p className="font-semibold text-amber-700">Task Summary</p>
-              <ul className="text-amber-600 text-sm font-medium">
-                <li className="flex justify-between">
-                  <span>Total time</span>
-                  <span>{tasks.length}</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Number of task</span>
-                  <span>{tasks.length}</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Number of finished task</span>
-                  <span>
-                    {tasks.filter((task) => task.checked).length}/{tasks.length}
-                  </span>
-                </li>
+                    </li>
+                  );
+                })}
               </ul>
+            </div>
+            <div>
+              <div className="rounded-lg bg-amber-100	box-border h-130 w-500 py-3 px-4 my-3 mx-4">
+                <p className="font-semibold text-amber-700">Task Summary</p>
+                <ul className="text-amber-600 text-sm font-medium">
+                  <li className="flex justify-between">
+                    <span>Total time</span>
+                    <span>{tasks.length}</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span>Number of task</span>
+                    <span>{tasks.length}</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span>Number of finished task</span>
+                    <span>
+                      {tasks.filter((task) => task.checked).length}/
+                      {tasks.length}
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
+        <footer className="fixed bottom-10 right-4">
+          <div className="px-8 float-right	">
+            <button
+              className="bg-amber-600 rounded-full text-white text-2xl py-2 px-4 text-2xl w-12 h-12 p-auto"
+              onClick={createNewTask}
+            >
+              +
+            </button>
+          </div>
+        </footer>
       </div>
-      <footer className="fixed bottom-10 right-4">
-        <div className="px-8 float-right	">
-          <button
-            className="bg-amber-600 rounded-full text-white text-2xl py-2 px-4 text-2xl w-12 h-12 p-auto"
-            onClick={createNewTask}
-          >
-            +
-          </button>
-        </div>
+      <div>
+        {isCalendarOpen && (
+          <CalendarModal
+            defaultDate={date!}
+            onClose={closeCalendarModal}
+            onDateChange={onDateChange}
+          />
+        )}
+        {isSettingOpen && (
+          <SettingModal onClose={closeSettingModal}></SettingModal>
+        )}
         {isEditTaskOpen && (
           <EditTaskModal
             onClose={closeEditTaskModal}
@@ -305,7 +315,7 @@ export default function TaskList() {
         {isLoginModalOpen && (
           <AskForLoginModal onClose={closeAskForLoginModal}></AskForLoginModal>
         )}
-      </footer>
+      </div>
     </>
   );
 }
