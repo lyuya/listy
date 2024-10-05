@@ -5,7 +5,6 @@ import { getTaskByDate, updateTask } from "@/api/task.service";
 import { useDispatch } from "react-redux";
 import { loadTasksReducer, toggleTaskReducer } from "@/store/taskSlice";
 import { useAppSelector } from "@/store/hooks";
-import { Task } from "@/types/task";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
