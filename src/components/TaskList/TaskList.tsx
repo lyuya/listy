@@ -152,6 +152,8 @@ export default function TaskList() {
   useEffect(() => {
     if (isCalendarOpen || isEditTaskOpen || isLoginModalOpen || isSettingOpen) {
       document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
     }
   }, [isCalendarOpen, isEditTaskOpen, isLoginModalOpen, isSettingOpen]);
 
