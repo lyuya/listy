@@ -17,8 +17,6 @@ import {
 import { deleteTask, updateTask } from "@/api/task.service";
 import { useDispatch } from "react-redux";
 import { toggleTaskReducer } from "@/store/taskSlice";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
 import DeleteConfirmationModal from "../deleteConfirmation/DeleteConfirmationModal";
 import styles from "./EditTaskModal.module.css";
 import { auth } from "@/firebase/firebase";
@@ -42,8 +40,6 @@ export default function EditTaskModal({
   const [startTimePickerOpen, setStartTimePickerOpen] = useState(false);
   const [endTimePickerOpen, setEndTimePickerOpen] = useState(false);
 
-  dayjs.extend(utc);
-  dayjs.extend(timezone);
   const dispatch = useDispatch();
   const startDate: Dayjs = useMemo(() => {
     return dayjs(task.startTime);

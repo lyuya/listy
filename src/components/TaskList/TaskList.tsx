@@ -35,7 +35,7 @@ export default function TaskList() {
     date.setMinutes(0, 0, 0);
     return date.getTime();
   };
-  const defaultTask: Task = {
+  const [defaultTask, setDefaultTask] = useState({
     name: "",
     startTime: nextRoundedTime(new Date()),
     endTime: nextRoundedTime(new Date()),
@@ -43,7 +43,7 @@ export default function TaskList() {
     checked: false,
     subtasks: [],
     userId: "",
-  };
+  });
   const addOneDay = (date: Date) => {
     const _date = new Date(date);
     _date.setDate(date.getDate() + 1);
@@ -141,6 +141,12 @@ export default function TaskList() {
   useEffect(() => {
     if (date) {
       getTasks();
+      const newDefaultTask = {
+        ...defaultTask,
+        startTime: nextRoundedTime(date),
+        endTime: nextRoundedTime(date),
+      };
+      setDefaultTask(newDefaultTask);
     }
   }, [date, user]);
 
