@@ -147,10 +147,10 @@ export default function TaskList() {
 
   return (
     <>
-      <div>
+      <div className="min-w-96">
         <header>
           <div className="inline-flex w-full justify-between lg:px-8 md:px-4">
-            <div className="text-2xl my-auto">
+            <div className="text-2xl my-auto px-3">
               <button
                 className="text-primary px-2"
                 onClick={() => minusOneDay(date!)}

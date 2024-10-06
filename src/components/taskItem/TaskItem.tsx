@@ -49,14 +49,18 @@ export default function TaskItem({ task, openEditTaskModal }: TaskItemProps) {
                 {task.name}
               </span>
             </div>
-            <div className="inline-flex text-sm text-primary">
-              {startTimeToDisplay}
-              <div className="flex my-auto">
-                <ArrowForwardIcon fontSize="small"></ArrowForwardIcon>
+            <div className="block sm:inline-flex text-sm text-primary">
+              <div className="inline-flex">
+                {startTimeToDisplay}
+                <div className="flex my-auto">
+                  <ArrowForwardIcon fontSize="small"></ArrowForwardIcon>
+                </div>
+                {endTimeToDisplay}
               </div>
-              {endTimeToDisplay} ({" "}
-              {Math.floor((task.endTime - task.startTime) / 60000 / 60)} hours{" "}
-              {((task.endTime - task.startTime) / 60000) % 60} minutes )
+              <div>
+                ( {Math.floor((task.endTime - task.startTime) / 60000 / 60)}{" "}
+                hours {((task.endTime - task.startTime) / 60000) % 60} minutes )
+              </div>
             </div>
           </div>
           <div
