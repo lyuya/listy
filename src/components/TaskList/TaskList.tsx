@@ -123,27 +123,24 @@ export default function TaskList() {
                 ))}
               </ul>
             </div>
-            <div>
-              <div className="rounded-lg bg-light	box-border h-130 w-500 py-3 px-4 my-3 mx-4">
-                <p className="font-semibold text-primary">Task Summary</p>
-                <ul className="text-primary text-sm font-medium">
-                  <li className="flex justify-between">
-                    <span>Total time</span>
-                    <span>{tasks.length}</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Number of task</span>
-                    <span>{tasks.length}</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Number of finished task</span>
-                    <span>
-                      {tasks.filter((task) => task.checked).length}/
-                      {tasks.length}
-                    </span>
-                  </li>
-                </ul>
-              </div>
+            <div className="rounded-lg bg-light	box-border h-130 w-500 py-3 px-4 my-3 mx-4">
+              <p className="font-semibold text-primary">Task Summary</p>
+              <ul className="text-primary text-sm font-medium">
+                <li className="flex justify-between">
+                  <span>Total time</span>
+                  <span>{tasks.length}</span>
+                </li>
+                <li className="flex justify-between">
+                  <span>Number of task</span>
+                  <span>{tasks.length}</span>
+                </li>
+                <li className="flex justify-between">
+                  <span>Number of finished task</span>
+                  <span>
+                    {tasks.filter((task) => task.checked).length}/{tasks.length}
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
