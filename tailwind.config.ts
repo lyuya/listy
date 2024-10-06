@@ -1,4 +1,6 @@
 import type { Config } from "tailwindcss";
+import colors, { white } from "tailwindcss/colors";
+import tailwindColors from "tailwindcss/colors";
 
 const config: Config = {
   content: [
@@ -7,10 +9,23 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    colors: {
+      white: colors.white,
+      amber: colors.amber,
+      lime: colors.lime,
+      teal: colors.teal,
+      sky: colors.sky,
+      violet: colors.violet,
+      pink: colors.pink,
+      gray: colors.gray,
+      stone: colors.stone,
+      primary: "var(--primary)",
+      light: "var(--light)",
+    },
     extend: {
       colors: {
         colors: {
-          primary: "#16a34a",
+          primary: colors.amber,
         },
         background: "var(--background)",
         foreground: "var(--foreground)",

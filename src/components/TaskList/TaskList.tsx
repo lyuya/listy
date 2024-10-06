@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Dayjs } from "dayjs";
-import CalendarModal from "@/components/modal/calendar/CalendarModal";
 import { getTaskByDate } from "@/api/task.service";
 import { useDispatch } from "react-redux";
 import { loadTasksReducer } from "@/store/taskSlice";
@@ -13,9 +12,12 @@ import { auth } from "@/firebase/firebase";
 import AskForLoginModal from "../modal/login/AskForLoginModal";
 import { User } from "firebase/auth";
 import TaskItem from "../taskItem/TaskItem";
+import ColorPaletteModal from "../modal/setting/colorPalette/ColorPaletteModal";
+import CalendarModal from "../modal/setting/calendar/CalendarModal";
 
 export default function TaskList() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -150,7 +152,7 @@ export default function TaskList() {
           <div className="inline-flex w-full justify-between lg:px-8 md:px-4">
             <div className="text-2xl my-auto">
               <button
-                className="text-amber-600 px-2"
+                className="text-primary px-2"
                 onClick={() => minusOneDay(date!)}
               >
                 &#10094;
@@ -158,19 +160,19 @@ export default function TaskList() {
               {date?.toLocaleString("default", { month: "long" })}
               &ensp;
               {date?.getDate().toLocaleString()}
-              <span className="text-amber-600 px-2">{date?.getFullYear()}</span>
+              <span className="text-primary px-2">{date?.getFullYear()}</span>
               <button
-                className="text-amber-600 pr-2"
+                className="text-primary pr-2"
                 onClick={() => addOneDay(date!)}
               >
                 &#10095;
               </button>
             </div>
             <div className="m-4 flex gap-2">
-              <button className="text-amber-600" onClick={openCalendarModal}>
+              <button className="text-primary" onClick={openCalendarModal}>
                 <EditCalendarOutlinedIcon fontSize="medium"></EditCalendarOutlinedIcon>
               </button>
-              <button className="text-amber-600" onClick={openSettingModal}>
+              <button className="text-primary" onClick={openSettingModal}>
                 <SettingsOutlinedIcon></SettingsOutlinedIcon>
               </button>
             </div>
@@ -190,9 +192,9 @@ export default function TaskList() {
               </ul>
             </div>
             <div>
-              <div className="rounded-lg bg-amber-100	box-border h-130 w-500 py-3 px-4 my-3 mx-4">
-                <p className="font-semibold text-amber-700">Task Summary</p>
-                <ul className="text-amber-600 text-sm font-medium">
+              <div className="rounded-lg bg-light	box-border h-130 w-500 py-3 px-4 my-3 mx-4">
+                <p className="font-semibold text-primary">Task Summary</p>
+                <ul className="text-primary text-sm font-medium">
                   <li className="flex justify-between">
                     <span>Total time</span>
                     <span>{tasks.length}</span>
@@ -216,7 +218,7 @@ export default function TaskList() {
         <footer className="fixed bottom-10 right-4">
           <div className="px-8 float-right	">
             <button
-              className="bg-amber-600 rounded-full text-white text-2xl py-2 px-4 text-2xl w-12 h-12 p-auto"
+              className="bg-primary rounded-full text-white text-2xl py-2 px-4 text-2xl w-12 h-12 p-auto"
               onClick={createNewTask}
             >
               +
@@ -233,7 +235,10 @@ export default function TaskList() {
           />
         )}
         {isSettingOpen && (
-          <SettingModal onClose={closeSettingModal}></SettingModal>
+          <SettingModal
+            onClose={closeSettingModal}
+            openColorPaletteModal={() => setIsColorPaletteOpen(true)}
+          ></SettingModal>
         )}
         {isEditTaskOpen && (
           <EditTaskModal
@@ -243,6 +248,11 @@ export default function TaskList() {
         )}
         {isLoginModalOpen && (
           <AskForLoginModal onClose={closeAskForLoginModal}></AskForLoginModal>
+        )}
+        {isColorPaletteOpen && (
+          <ColorPaletteModal
+            onClose={() => setIsColorPaletteOpen(false)}
+          ></ColorPaletteModal>
         )}
       </div>
     </>

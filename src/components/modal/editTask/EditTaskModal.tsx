@@ -225,7 +225,7 @@ export default function EditTaskModal({
           }}
         >
           <div className="border-b-1">
-            <span className="font-bold text-amber-600 text-xl">
+            <span className="font-bold text-primary text-xl">
               {task.id ? "Edit task" : "New task"}
             </span>
             <button className="modal-close" onClick={onClose}>
@@ -320,12 +320,12 @@ export default function EditTaskModal({
             <div className="min-h-40 lg:grid lg:grid-cols-2 ">
               <div className="w-full">
                 <div className="w-full p-3 inline-flex justify-between">
-                  <span className="font-bold text-amber-600 justify-center flex">
+                  <span className="font-bold text-primary justify-center flex">
                     Subtasks
                   </span>
                   &ensp;
                   <button
-                    className="px-3 py-1 h-fit bg-amber-600 text-white rounded-full text-sm"
+                    className="px-3 py-1 h-fit bg-primary text-white rounded-full text-sm"
                     onClick={createNewSubtask}
                   >
                     + add a subtask
@@ -335,12 +335,12 @@ export default function EditTaskModal({
                   {task.subtasks.map((subtask, i) => (
                     <li key={i}>
                       <div className="">
-                        <div className="w-full flex rounded-md border border-amber-600 mb-2 px-2">
+                        <div className="w-full flex rounded-md border border-primary mb-2 px-2">
                           <div className="flex relative w-full">
                             <input
                               checked={subtask.checked}
                               onChange={(e) => setSubtaskChecked(e, i)}
-                              className="accent-amber-600 mr-2"
+                              className="accent-primary mr-2"
                               type="checkbox"
                             />
                             <input
@@ -353,7 +353,7 @@ export default function EditTaskModal({
                             ></input>
                           </div>
                           <button
-                            className="rounded-full text-amber-600 hover:bg-amber-50 p-1 w-8"
+                            className="rounded-full text-primary hover:bg-light p-1 w-8"
                             onClick={() => deleteSubtask(i)}
                           >
                             <DeleteOutlineIcon fontSize="small"></DeleteOutlineIcon>
@@ -378,9 +378,9 @@ export default function EditTaskModal({
           <div>
             <div className="flex justify-between">
               <div>
-                <div className="flex gap-2 text-amber-600">
+                <div className="flex gap-2 text-primary">
                   <button
-                    className="hover:bg-amber-50 rounded-full p-2"
+                    className="hover:bg-light rounded-full p-2"
                     onClick={setTaskChecked}
                   >
                     {checked && <TaskAltIcon></TaskAltIcon>}
@@ -389,7 +389,7 @@ export default function EditTaskModal({
                     )}
                   </button>
                   <button
-                    className="hover:bg-amber-50 rounded-full p-2"
+                    className="hover:bg-light rounded-full p-2"
                     onClick={openDeleteConfirmationModal}
                   >
                     <DeleteOutlineIcon></DeleteOutlineIcon>
@@ -404,7 +404,7 @@ export default function EditTaskModal({
               </div>
               <div className="flex items-end gap-1">
                 <button
-                  className="px-3 py-1 bg-amber-600 text-white rounded-md"
+                  className="px-3 py-1 bg-primary text-white rounded-md"
                   onClick={(e) => {
                     e.stopPropagation();
                     onClose();
@@ -413,7 +413,7 @@ export default function EditTaskModal({
                   cancel
                 </button>
                 <button
-                  className="px-3 py-1 bg-amber-600 text-white rounded-md"
+                  className="px-3 py-1 bg-primary text-white rounded-md"
                   onClick={(e) => {
                     e.stopPropagation();
                     saveNewTask(task);

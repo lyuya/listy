@@ -14,6 +14,53 @@
   }
 }
 
+/* Default Mode */
+:root {
+  --primary: theme("colors.amber.600");
+  --background: white;
+  --light: theme("colors.amber.50");
+}
+
+.amber-mode {
+  --primary: theme("colors.amber.600");
+  --light: theme("colors.amber.50");
+}
+
+.lime-mode {
+  --primary: theme("colors.lime.600");
+  --light: theme("colors.lime.50");
+}
+
+.teal-mode {
+  --primary: theme("colors.teal.600");
+  --light: theme("colors.teal.50");
+}
+
+.sky-mode {
+  --primary: theme("colors.sky.600");
+  --light: theme("colors.sky.50");
+}
+
+.violet-mode {
+  --primary: theme("colors.violet.600");
+  --light: theme("colors.violet.50");
+}
+
+.pink-mode {
+  --primary: theme("colors.pink.600");
+  --light: theme("colors.pink.50");
+}
+
+.gray-mode {
+  --primary: theme("colors.gray.600");
+  --light: theme("colors.gray.50");
+}
+
+.stone-mode {
+  --primary: theme("colors.stone.600");
+  --light: theme("colors.stone.50");
+}
+
 body {
   color: var(--foreground);
   background: var(--background);

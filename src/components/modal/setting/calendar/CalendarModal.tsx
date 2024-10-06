@@ -27,7 +27,7 @@ const CalendarModal = ({
 
   return (
     <div
-      className="modal-backdrop sm:bg-transparent dark"
+      className="modal-backdrop dark sm:bg-transparent"
       onClick={handleCloseClick}
     >
       <div className="modal sm:right-[100px]">

@@ -38,7 +38,7 @@
     display: inline-block;
     vertical-align: middle;
     padding: 0.75em;
-    background-color: #d97706;
+    background-color: var(--primary);
     border-radius: 50%;
   }
 }

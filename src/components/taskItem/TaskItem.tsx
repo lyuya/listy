@@ -39,17 +39,17 @@ export default function TaskItem({ task, openEditTaskModal }: TaskItemProps) {
         <label className={styles.timelineItem}></label>
       </div>
       <div
-        className="rounded-lg bg-amber-100 w-full h-130 w-500 py-3 px-4 my-3 mx-4"
+        className="rounded-lg bg-light w-full h-130 w-500 py-3 px-4 my-3 mx-4"
         onClick={() => openTaskModal()}
       >
         <div className="flex justify-between">
           <div>
             <div className={task.checked ? styles.done : ""}>
-              <span className={styles.label + " text-amber-700 font-semibold"}>
+              <span className={styles.label + " text-primary font-semibold"}>
                 {task.name}
               </span>
             </div>
-            <div className="inline-flex text-sm text-amber-600">
+            <div className="inline-flex text-sm text-primary">
               {startTimeToDisplay}
               <div className="flex my-auto">
                 <ArrowForwardIcon fontSize="small"></ArrowForwardIcon>
@@ -65,7 +65,7 @@ export default function TaskItem({ task, openEditTaskModal }: TaskItemProps) {
             }}
           >
             <button
-              className="text-amber-700"
+              className="text-primary"
               onClick={() => {
                 setOneTaskChecked();
               }}

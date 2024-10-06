@@ -1,29 +1,25 @@
 import { TimePickerSlotProps } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import colors from "tailwindcss/colors";
 
-const colorName = "amber";
-const themeColor = colors[colorName][600];
-const grey = "#e5e7eb";
 export const customDatePicker = {
   day: {
     sx: {
       "&.MuiPickersDay-root.Mui-selected": {
-        backgroundColor: themeColor,
+        backgroundColor: "var(--primary)",
       },
     },
   },
   monthButton: {
     sx: {
       "&.MuiPickersMonth-monthButton.Mui-selected": {
-        backgroundColor: themeColor,
+        backgroundColor: "var(--primary)",
       },
     },
   },
   yearButton: {
     sx: {
       "&.MuiPickersYear-yearButton.Mui-selected": {
-        backgroundColor: themeColor,
+        backgroundColor: "var(--primary)",
       },
     },
   },
@@ -37,10 +33,10 @@ export const customDigitalClockSectionItem: TimePickerSlotProps<
     sx: {
       "& .MuiMenuItem-root": {
         "&.Mui-selected": {
-          backgroundColor: themeColor,
+          backgroundColor: "var(--primary)",
         },
         "&.Mui-selected:hover": {
-          backgroundColor: themeColor,
+          backgroundColor: "var(--primary)",
         },
       },
     },
@@ -49,12 +45,12 @@ export const customDigitalClockSectionItem: TimePickerSlotProps<
 
 export const customCssTextField = {
   "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-    border: "1px solid " + grey,
+    border: "1px solid #e5e7eb",
   },
   "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-    border: "2px solid " + themeColor,
+    border: "2px solid " + "var(--primary)",
   },
   "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    border: "2px solid " + themeColor,
+    border: "2px solid " + "var(--primary)",
   },
 };
