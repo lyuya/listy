@@ -16,42 +16,43 @@ import ColorPaletteModal from "../modal/setting/colorPalette/ColorPaletteModal";
 import CalendarModal from "../modal/setting/calendar/CalendarModal";
 
 export default function TaskList() {
+  const todayDate = new Date();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [taskIndex, setTaskIndex] = useState<number>();
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date>(todayDate);
   const [user, setUser] = useState<User | null>(null);
   const dispatch = useDispatch();
 
   const tasks = useAppSelector((state) => state.task.value);
-
   const nextRoundedTime = (date: Date) => {
-    date.setHours(date.getHours() + 1);
-    date.setMinutes(0, 0, 0);
-    return date.getTime();
+    const dateCloned = new Date(date);
+    dateCloned.setHours(date.getHours() + 1);
+    dateCloned.setMinutes(0, 0, 0);
+    return dateCloned.getTime();
   };
   const [defaultTask, setDefaultTask] = useState({
     name: "",
-    startTime: nextRoundedTime(new Date()),
-    endTime: nextRoundedTime(new Date()),
+    startTime: nextRoundedTime(todayDate),
+    endTime: nextRoundedTime(todayDate),
     description: "",
     checked: false,
     subtasks: [],
     userId: "",
   });
   const addOneDay = (date: Date) => {
-    const _date = new Date(date);
-    _date.setDate(date.getDate() + 1);
-    setDate(_date);
+    const dateCloned = new Date(date);
+    dateCloned.setDate(date.getDate() + 1);
+    setDate(dateCloned);
   };
 
   const minusOneDay = (date: Date) => {
-    const _date = new Date(date);
-    _date.setDate(date.getDate() - 1);
-    setDate(_date);
+    const dateCloned = new Date(date);
+    dateCloned.setDate(date.getDate() - 1);
+    setDate(dateCloned);
   };
 
   const openCalendarModal = () => {
@@ -119,7 +120,6 @@ export default function TaskList() {
   };
 
   useEffect(() => {
-    setDate(new Date());
     auth.onAuthStateChanged((user) => {
       setUser(user);
     });
