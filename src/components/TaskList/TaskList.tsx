@@ -1,33 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Dayjs } from "dayjs";
 import { getTaskByDate } from "@/api/task.service";
 import { useDispatch } from "react-redux";
 import { loadTasksReducer } from "@/store/taskSlice";
 import { useAppSelector } from "@/store/hooks";
 import EditTaskModal from "../modal/editTask/EditTaskModal";
-import EditCalendarOutlinedIcon from "@mui/icons-material/EditCalendarOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import SettingModal from "@/components/modal/setting/SettingModal";
 import { auth } from "@/firebase/firebase";
 import AskForLoginModal from "../modal/login/AskForLoginModal";
 import { User } from "firebase/auth";
 import TaskItem from "../taskItem/TaskItem";
-import ColorPaletteModal from "../modal/setting/colorPalette/ColorPaletteModal";
-import CalendarModal from "../modal/setting/calendar/CalendarModal";
+import Header from "../header/Header";
 
 export default function TaskList() {
   const todayDate = new Date();
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
-  const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [taskIndex, setTaskIndex] = useState<number>();
-  const [date, setDate] = useState<Date>(todayDate);
   const [user, setUser] = useState<User | null>(null);
   const dispatch = useDispatch();
 
   const tasks = useAppSelector((state) => state.task.value);
+  const date = useAppSelector((state) => state.date.value);
   const nextRoundedTime = (date: Date) => {
     const dateCloned = new Date(date);
     dateCloned.setHours(date.getHours() + 1);
@@ -43,25 +35,6 @@ export default function TaskList() {
     subtasks: [],
     userId: "",
   });
-  const addOneDay = (date: Date) => {
-    const dateCloned = new Date(date);
-    dateCloned.setDate(date.getDate() + 1);
-    setDate(dateCloned);
-  };
-
-  const minusOneDay = (date: Date) => {
-    const dateCloned = new Date(date);
-    dateCloned.setDate(date.getDate() - 1);
-    setDate(dateCloned);
-  };
-
-  const openCalendarModal = () => {
-    setIsCalendarOpen(true);
-  };
-
-  const closeCalendarModal = () => {
-    setIsCalendarOpen(false);
-  };
 
   const openEditTaskModal = (index: number) => {
     setIsEditTaskOpen(true);
@@ -72,10 +45,6 @@ export default function TaskList() {
     setIsEditTaskOpen(false);
     setTaskIndex(undefined);
     getTasks();
-  };
-
-  const onDateChange = (newDate: Dayjs) => {
-    setDate(newDate.toDate());
   };
 
   const createNewTask = () => {
@@ -96,14 +65,6 @@ export default function TaskList() {
 
   const closeAskForLoginModal = () => {
     setIsLoginModalOpen(false);
-  };
-
-  const openSettingModal = () => {
-    setIsSettingOpen(true);
-  };
-
-  const closeSettingModal = () => {
-    setIsSettingOpen(false);
   };
 
   const getTasks = async () => {
@@ -138,46 +99,17 @@ export default function TaskList() {
   }, [date, user]);
 
   useEffect(() => {
-    if (isCalendarOpen || isEditTaskOpen || isLoginModalOpen || isSettingOpen) {
+    if (isEditTaskOpen || isLoginModalOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
     }
-  }, [isCalendarOpen, isEditTaskOpen, isLoginModalOpen, isSettingOpen]);
+  }, [isEditTaskOpen, isLoginModalOpen]);
 
   return (
     <>
       <div className="min-w-96">
-        <header>
-          <div className="inline-flex w-full justify-between lg:px-8 md:px-4">
-            <div className="text-2xl my-auto px-3">
-              <button
-                className="text-primary px-2"
-                onClick={() => minusOneDay(date!)}
-              >
-                &#10094;
-              </button>
-              {date?.toLocaleString("default", { month: "long" })}
-              &ensp;
-              {date?.getDate().toLocaleString()}
-              <span className="text-primary px-2">{date?.getFullYear()}</span>
-              <button
-                className="text-primary pr-2"
-                onClick={() => addOneDay(date!)}
-              >
-                &#10095;
-              </button>
-            </div>
-            <div className="m-4 flex gap-2">
-              <button className="text-primary" onClick={openCalendarModal}>
-                <EditCalendarOutlinedIcon fontSize="medium"></EditCalendarOutlinedIcon>
-              </button>
-              <button className="text-primary" onClick={openSettingModal}>
-                <SettingsOutlinedIcon></SettingsOutlinedIcon>
-              </button>
-            </div>
-          </div>
-        </header>
+        <Header></Header>
         <div className="py-4 lg:px-8 md:px-4">
           <div className="lg:grid lg:grid-cols-3 lg:gap-4 ">
             <div className="col-span-2" id="taskList">
@@ -227,19 +159,6 @@ export default function TaskList() {
         </footer>
       </div>
       <div>
-        {isCalendarOpen && (
-          <CalendarModal
-            defaultDate={date!}
-            onClose={closeCalendarModal}
-            onDateChange={onDateChange}
-          />
-        )}
-        {isSettingOpen && (
-          <SettingModal
-            onClose={closeSettingModal}
-            openColorPaletteModal={() => setIsColorPaletteOpen(true)}
-          ></SettingModal>
-        )}
         {isEditTaskOpen && (
           <EditTaskModal
             onClose={closeEditTaskModal}
@@ -248,11 +167,6 @@ export default function TaskList() {
         )}
         {isLoginModalOpen && (
           <AskForLoginModal onClose={closeAskForLoginModal}></AskForLoginModal>
-        )}
-        {isColorPaletteOpen && (
-          <ColorPaletteModal
-            onClose={() => setIsColorPaletteOpen(false)}
-          ></ColorPaletteModal>
         )}
       </div>
     </>
