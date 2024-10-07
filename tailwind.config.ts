@@ -18,7 +18,7 @@ const config: Config = {
       violet: colors.violet,
       pink: colors.pink,
       gray: colors.gray,
-      stone: colors.stone,
+      rose: colors.rose,
       primary: "var(--primary)",
       light: "var(--light)",
     },

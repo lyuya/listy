@@ -19,50 +19,50 @@ export default function ColorPaletteModal({ onClose }: ColorPaletteModalProps) {
         <div className="modal rounded-lg bg-white sm:right-[100px]">
           <div className="w-60 grid grid-cols-4 gap-4 p-6">
             <div
-              className={styles.dot + " bg-amber-600  text-white p-4"}
+              className={styles.dot + " bg-rose-400  text-white p-4"}
+              onClick={() => onColorChange("red")}
+            >
+              &nbsp;
+            </div>
+            <div
+              className={styles.dot + " bg-amber-400  text-white p-4"}
               onClick={() => onColorChange("amber")}
             >
               &nbsp;
             </div>
             <div
-              className={styles.dot + " bg-lime-600  text-white p-4"}
+              className={styles.dot + " bg-lime-400  text-white p-4"}
               onClick={() => onColorChange("lime")}
             >
               &nbsp;
             </div>
             <div
-              className={styles.dot + " bg-teal-600  text-white p-4"}
+              className={styles.dot + " bg-teal-400  text-white p-4"}
               onClick={() => onColorChange("teal")}
             >
               &nbsp;
             </div>
             <div
-              className={styles.dot + " bg-sky-600  text-white p-4"}
+              className={styles.dot + " bg-sky-400  text-white p-4"}
               onClick={() => onColorChange("sky")}
             >
               &nbsp;
             </div>
             <div
-              className={styles.dot + " bg-violet-600  text-white p-4"}
+              className={styles.dot + " bg-violet-400  text-white p-4"}
               onClick={() => onColorChange("violet")}
             >
               &nbsp;
             </div>
             <div
-              className={styles.dot + " bg-pink-600  text-white p-4"}
+              className={styles.dot + " bg-pink-400  text-white p-4"}
               onClick={() => onColorChange("pink")}
             >
               &nbsp;
             </div>
             <div
-              className={styles.dot + " bg-gray-600  text-white p-4"}
+              className={styles.dot + " bg-gray-400  text-white p-4"}
               onClick={() => onColorChange("gray")}
-            >
-              &nbsp;
-            </div>
-            <div
-              className={styles.dot + " bg-stone-600  text-white p-4"}
-              onClick={() => onColorChange("stone")}
             >
               &nbsp;
             </div>

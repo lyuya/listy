@@ -56,9 +56,9 @@
   --light: theme("colors.gray.50");
 }
 
-.stone-mode {
-  --primary: theme("colors.stone.600");
-  --light: theme("colors.stone.50");
+.red-mode {
+  --primary: theme("colors.rose.600");
+  --light: theme("colors.rose.50");
 }
 
 body {
