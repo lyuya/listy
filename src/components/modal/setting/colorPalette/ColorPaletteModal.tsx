@@ -1,3 +1,4 @@
+import { updateTheme } from "@/api/user.service";
 import styles from "./ColorPaletteModal.module.css";
 
 interface ColorPaletteModalProps {
@@ -11,6 +12,7 @@ export default function ColorPaletteModal({ onClose }: ColorPaletteModalProps) {
       root.className = "";
       root.classList.add(`${color}-mode`);
     }
+    updateTheme(color);
   };
 
   return (
