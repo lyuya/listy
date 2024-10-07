@@ -16,7 +16,7 @@ const updateTheme = async (theme: string) => {
   const userSetting = await getUserSetting();
   const updatedUserSetting: UserSetting = {
     theme: theme,
-    userId: auth.currentUser?.uid!,
+    userId: auth.currentUser?.uid ?? "",
   };
   if (userSetting.id) {
     setDoc(doc(db, collectionName, userSetting.id), updatedUserSetting);
