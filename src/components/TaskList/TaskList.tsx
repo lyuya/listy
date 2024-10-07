@@ -128,14 +128,36 @@ export default function TaskList() {
               <ul className="text-primary text-sm font-medium">
                 <li className="flex justify-between">
                   <span>Total time</span>
-                  <span>{tasks.length}</span>
+                  <span>
+                    (
+                    {Math.floor(
+                      tasks
+                        .map((task) => task.endTime - task.startTime)
+                        .reduce(
+                          (duration1, duration2) => duration1 + duration2,
+                          0,
+                        ) /
+                        60000 /
+                        60,
+                    )}{" "}
+                    hours
+                    {(tasks
+                      .map((task) => task.endTime - task.startTime)
+                      .reduce(
+                        (duration1, duration2) => duration1 + duration2,
+                        0,
+                      ) /
+                      60000) %
+                      60}{" "}
+                    minutes )
+                  </span>
                 </li>
                 <li className="flex justify-between">
                   <span>Number of task</span>
                   <span>{tasks.length}</span>
                 </li>
                 <li className="flex justify-between">
-                  <span>Number of finished task</span>
+                  <span>Number of completed task</span>
                   <span>
                     {tasks.filter((task) => task.checked).length}/{tasks.length}
                   </span>
