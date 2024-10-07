@@ -129,7 +129,6 @@ export default function TaskList() {
                 <li className="flex justify-between">
                   <span>Total time</span>
                   <span>
-                    (
                     {Math.floor(
                       tasks
                         .map((task) => task.endTime - task.startTime)
@@ -149,7 +148,7 @@ export default function TaskList() {
                       ) /
                       60000) %
                       60}{" "}
-                    minutes )
+                    minutes
                   </span>
                 </li>
                 <li className="flex justify-between">
