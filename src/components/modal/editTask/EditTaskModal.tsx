@@ -367,7 +367,7 @@ export default function EditTaskModal({
               <div className="p-3">
                 <textarea
                   rows={10}
-                  className="appearance-none border-2 border-gray-200 rounded-md w-full py-2 px-4 text-gray-700 focus:outline-none focus:bg-white resize-none h-20"
+                  className="appearance-none border border-gray-200 rounded-md w-full py-2 px-4 text-gray-700 focus:outline-none focus:bg-white resize-none h-20"
                   placeholder="Description..."
                   value={task.description}
                   onChange={(e) => setDescription(e.target.value)}
