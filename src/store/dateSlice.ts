@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface DateState {
-  value: Date | undefined;
+  value: number;
 }
-const todayDate = new Date();
+const todayDate = new Date().getTime();
 
 const initialState: DateState = {
   value: todayDate,
@@ -13,7 +13,7 @@ export const dateSlice = createSlice({
   initialState,
   reducers: {
     loadDateReducer: (state, action) => {
-      state.value = action.payload;
+      state.value = action.payload.getTime();
     },
   },
 });

@@ -1,5 +1,5 @@
 import { Dayjs } from "dayjs";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import EditCalendarOutlinedIcon from "@mui/icons-material/EditCalendarOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ColorPaletteModal from "../modal/setting/colorPalette/ColorPaletteModal";
@@ -7,9 +7,12 @@ import CalendarModal from "../modal/setting/calendar/CalendarModal";
 import SettingModal from "../modal/setting/SettingModal";
 import { useDispatch } from "react-redux";
 import { loadDateReducer } from "@/store/dateSlice";
+import { useAppSelector } from "@/store/hooks";
 
 export default function Header() {
   const dispatch = useDispatch();
+  const dateTime = useAppSelector((state) => state.date.value);
+  const date = useMemo(() => new Date(dateTime), [dateTime]);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
