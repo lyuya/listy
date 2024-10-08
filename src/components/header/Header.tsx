@@ -17,7 +17,7 @@ export default function Header() {
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const updateDate = (date: Date) => {
-    dispatch(loadDateReducer(date));
+    dispatch(loadDateReducer(date.getTime()));
   };
 
   const plusOneDay = (date: Date) => {

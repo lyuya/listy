@@ -13,7 +13,7 @@ export const dateSlice = createSlice({
   initialState,
   reducers: {
     loadDateReducer: (state, action) => {
-      state.value = action.payload.getTime();
+      state.value = action.payload;
     },
   },
 });
