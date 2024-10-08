@@ -9,8 +9,8 @@ import {
   Timestamp,
   where,
 } from "firebase/firestore";
-import { auth, db } from "@/firebase/firebase";
-import { Task } from "@/types/task";
+import { auth, db } from "../firebase/firebase";
+import { Task } from "../types/task";
 const tasks = collection(db, "task");
 
 const getTaskByDate = async (date: Date): Promise<Task[]> => {

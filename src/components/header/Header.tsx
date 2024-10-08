@@ -6,8 +6,8 @@ import ColorPaletteModal from "../modal/setting/colorPalette/ColorPaletteModal";
 import CalendarModal from "../modal/setting/calendar/CalendarModal";
 import SettingModal from "../modal/setting/SettingModal";
 import { useDispatch } from "react-redux";
-import { loadDateReducer } from "@/store/dateSlice";
-import { useAppSelector } from "@/store/hooks";
+import { loadDateReducer } from "../../store/dateSlice";
+import { useAppSelector } from "../../store/hooks";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ export default function Header() {
     dispatch(loadDateReducer(date));
   };
 
-  const addOneDay = (date: Date) => {
+  const plusOneDay = (date: Date) => {
     const dateCloned = new Date(date);
     dateCloned.setDate(date.getDate() + 1);
     updateDate(dateCloned);
@@ -64,6 +64,7 @@ export default function Header() {
       <div className="inline-flex w-full justify-between lg:px-8 md:px-4">
         <div className="text-2xl my-auto px-3">
           <button
+            id="minusOneDay"
             className="text-primary px-2"
             onClick={() => minusOneDay(date!)}
           >
@@ -74,8 +75,9 @@ export default function Header() {
           {date?.getDate().toLocaleString()}
           <span className="text-primary px-2">{date?.getFullYear()}</span>
           <button
+            id="plusOneDay"
             className="text-primary pr-2"
-            onClick={() => addOneDay(date!)}
+            onClick={() => plusOneDay(date!)}
           >
             &#10095;
           </button>

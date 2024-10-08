@@ -1,5 +1,5 @@
-import { login, logout } from "@/api/auth.service";
-import { auth } from "@/firebase/firebase";
+import { login, logout } from "../../../api/auth.service";
+import { auth } from "../../../firebase/firebase";
 import PaletteIcon from "@mui/icons-material/Palette";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";

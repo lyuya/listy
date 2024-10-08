@@ -1,12 +1,12 @@
-import { Task } from "@/types/task";
+import { Task } from "../../types/task";
 import dayjs from "dayjs";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import styles from "./TaskItem.module.css";
-import { updateTask } from "@/api/task.service";
+import { updateTask } from "../../api/task.service";
 import { useDispatch } from "react-redux";
-import { toggleTaskReducer } from "@/store/taskSlice";
+import { toggleTaskReducer } from "../../store/taskSlice";
 
 interface TaskItemProps {
   task: Task;
@@ -58,8 +58,8 @@ export default function TaskItem({ task, openEditTaskModal }: TaskItemProps) {
                 {endTimeToDisplay}
               </div>
               <div>
-                ( {Math.floor((task.endTime - task.startTime) / 60000 / 60)}{" "}
-                hours {((task.endTime - task.startTime) / 60000) % 60} minutes )
+                ({Math.floor((task.endTime - task.startTime) / 60000 / 60)}{" "}
+                hours {((task.endTime - task.startTime) / 60000) % 60} minutes)
               </div>
             </div>
           </div>
@@ -69,6 +69,7 @@ export default function TaskItem({ task, openEditTaskModal }: TaskItemProps) {
             }}
           >
             <button
+              id="checked"
               className="text-primary"
               onClick={() => {
                 setOneTaskChecked();

@@ -39,17 +39,13 @@ The project is inspired by [Structured](https://structured.app/) and deployed us
 
 <img width="900" alt="Screenshot 2024-10-07 at 17 03 10" src="https://github.com/user-attachments/assets/aec15489-2fc1-4d9b-a783-0ce5c95c3b3f">
 
-
 **Task Detail Modal**
 
 <img width="900" alt="Screenshot 2024-10-07 at 17 03 21" src="https://github.com/user-attachments/assets/fcfe49e6-6a9d-457a-9dcc-b5d0e8fe37b6">
 
-
 **Customizable Themes**
 
 <img width="900" alt="Screenshot 2024-10-07 at 17 03 41" src="https://github.com/user-attachments/assets/3f89962d-4c8f-49c6-a3b1-bd74f5ea1575">
-
-
 
 ## Get started
 
@@ -75,5 +71,6 @@ For more detailed instructions on how to initialize Firestore, visit the officia
 [Firestore Quickstart](https://firebase.google.com/docs/firestore/quickstart).
 
 ## Deployed Application
+
 You can view the live version of Listy deployed on Vercel at:
 https://listy-ecru.vercel.app.

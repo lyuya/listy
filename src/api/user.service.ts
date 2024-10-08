@@ -1,5 +1,5 @@
-import { auth, db } from "@/firebase/firebase";
-import { UserSetting } from "@/types/userSetting";
+import { auth, db } from "../firebase/firebase";
+import { UserSetting } from "../types/userSetting";
 import {
   addDoc,
   collection,

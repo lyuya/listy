@@ -8,18 +8,18 @@ import { ChangeEvent, useMemo, useState } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import { Subtask, Task } from "@/types/task";
+import { Subtask, Task } from "../../../types/task";
 import {
   customCssTextField,
   customDatePicker,
   customDigitalClockSectionItem,
-} from "@/styles/CustomStyle";
-import { deleteTask, updateTask } from "@/api/task.service";
+} from "../../../styles/CustomStyle";
+import { deleteTask, updateTask } from "../../../api/task.service";
 import { useDispatch } from "react-redux";
-import { toggleTaskReducer } from "@/store/taskSlice";
+import { toggleTaskReducer } from "../../../store/taskSlice";
 import DeleteConfirmationModal from "../deleteConfirmation/DeleteConfirmationModal";
 import styles from "./EditTaskModal.module.css";
-import { auth } from "@/firebase/firebase";
+import { auth } from "../../../firebase/firebase";
 
 interface EditTaskModalProps {
   task: Task;
@@ -328,7 +328,7 @@ export default function EditTaskModal({
                     className="px-3 py-1 h-fit bg-primary text-white rounded-full text-sm"
                     onClick={createNewSubtask}
                   >
-                    + add a subtask
+                    + Add Subtask
                   </button>
                 </div>
                 <ul className="p-3">

@@ -18,10 +18,10 @@ export default function TaskList() {
   const [taskIndex, setTaskIndex] = useState<number>();
   const [user, setUser] = useState<User | null>(null);
   const dispatch = useDispatch();
-  const [userSettingIsLoaded, setUserSettingIsLoaded] = useState(false)
+  const [userSettingIsLoaded, setUserSettingIsLoaded] = useState(false);
   const tasks = useAppSelector((state) => state.task.value);
   const dateTime = useAppSelector((state) => state.date.value);
-  const date = useMemo(() => new Date(dateTime), [dateTime])
+  const date = useMemo(() => new Date(dateTime), [dateTime]);
   const nextRoundedTime = (date: Date) => {
     const dateCloned = new Date(date);
     dateCloned.setHours(date.getHours() + 1);
@@ -85,23 +85,19 @@ export default function TaskList() {
   const getTheme = async () => {
     const userSetting = await getUserSetting();
     if (userSetting) {
-          const root = document.getElementById("theme-root");
-    if (root) {
-      root.className = "";
-      root.classList.add(`${userSetting.theme}-mode`);
-    }
+      const root = document.getElementById("theme-root");
+      if (root) {
+        root.className = "";
+        root.classList.add(`${userSetting.theme}-mode`);
+      }
     }
     setUserSettingIsLoaded(true);
-
-  }
+  };
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       setUser(user);
-      getTheme()
-      // .then(() => {
-      //   setUserSettingIsLoaded(true);
-      // })
+      getTheme();
     });
   }, []);
 
@@ -126,94 +122,95 @@ export default function TaskList() {
   }, [isEditTaskOpen, isLoginModalOpen]);
 
   if (!userSettingIsLoaded) {
-    return (<div id="theme-root">Loading...</div>)
+    return <div id="theme-root">Loading...</div>;
   } else {
-      return (
-    <div id="theme-root">
-      <div className="min-w-96">
-        <Header></Header>
-        <div className="py-4 lg:px-8 md:px-4">
-          <div className="lg:grid lg:grid-cols-3 lg:gap-4 ">
-            <div className="col-span-2" id="taskList">
-              <ul>
-                {tasks.map((task, i) => (
-                  <TaskItem
-                    key={i}
-                    task={task}
-                    openEditTaskModal={() => openEditTaskModal(i)}
-                  ></TaskItem>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <div className="rounded-lg bg-light	box-border h-130 w-500 py-3 px-4 my-3 mx-4">
-                <p className="font-semibold text-primary">Task Summary</p>
-                <ul className="text-primary text-sm font-medium">
-                  <li className="flex justify-between">
-                    <span>Total time</span>
-                    <span>
-                      {Math.floor(
-                        tasks
+    return (
+      <div id="theme-root">
+        <div className="min-w-96">
+          <Header></Header>
+          <div className="py-4 lg:px-8 md:px-4">
+            <div className="lg:grid lg:grid-cols-3 lg:gap-4 ">
+              <div className="col-span-2" id="taskList">
+                <ul>
+                  {tasks.map((task, i) => (
+                    <TaskItem
+                      key={i}
+                      task={task}
+                      openEditTaskModal={() => openEditTaskModal(i)}
+                    ></TaskItem>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <div className="rounded-lg bg-light	box-border h-130 w-500 py-3 px-4 my-3 mx-4">
+                  <p className="font-semibold text-primary">Task Summary</p>
+                  <ul className="text-primary text-sm font-medium">
+                    <li className="flex justify-between">
+                      <span>Total time</span>
+                      <span>
+                        {Math.floor(
+                          tasks
+                            .map((task) => task.endTime - task.startTime)
+                            .reduce(
+                              (duration1, duration2) => duration1 + duration2,
+                              0,
+                            ) /
+                            60000 /
+                            60,
+                        )}{" "}
+                        hours
+                        {(tasks
                           .map((task) => task.endTime - task.startTime)
                           .reduce(
                             (duration1, duration2) => duration1 + duration2,
                             0,
                           ) /
-                          60000 /
-                          60,
-                      )}{" "}
-                      hours
-                      {(tasks
-                        .map((task) => task.endTime - task.startTime)
-                        .reduce(
-                          (duration1, duration2) => duration1 + duration2,
-                          0,
-                        ) /
-                        60000) %
-                        60}{" "}
-                      minutes
-                    </span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Number of task</span>
-                    <span>{tasks.length}</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Number of completed task</span>
-                    <span>
-                      {tasks.filter((task) => task.checked).length}/
-                      {tasks.length}
-                    </span>
-                  </li>
-                </ul>
+                          60000) %
+                          60}{" "}
+                        minutes
+                      </span>
+                    </li>
+                    <li className="flex justify-between">
+                      <span>Number of task</span>
+                      <span>{tasks.length}</span>
+                    </li>
+                    <li className="flex justify-between">
+                      <span>Number of completed task</span>
+                      <span>
+                        {tasks.filter((task) => task.checked).length}/
+                        {tasks.length}
+                      </span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
+          <footer className="fixed bottom-10 right-4">
+            <div className="px-8 float-right	">
+              <button
+                className="bg-primary rounded-full text-white text-2xl py-2 px-4 text-2xl w-12 h-12 p-auto"
+                onClick={createNewTask}
+              >
+                +
+              </button>
+            </div>
+          </footer>
         </div>
-        <footer className="fixed bottom-10 right-4">
-          <div className="px-8 float-right	">
-            <button
-              className="bg-primary rounded-full text-white text-2xl py-2 px-4 text-2xl w-12 h-12 p-auto"
-              onClick={createNewTask}
-            >
-              +
-            </button>
-          </div>
-        </footer>
+        <div>
+          {isEditTaskOpen && (
+            <EditTaskModal
+              onClose={closeEditTaskModal}
+              task={taskIndex !== undefined ? tasks[taskIndex] : defaultTask}
+            ></EditTaskModal>
+          )}
+          {isLoginModalOpen && (
+            <AskForLoginModal
+              onClose={closeAskForLoginModal}
+            ></AskForLoginModal>
+          )}
+        </div>
       </div>
-      <div>
-        {isEditTaskOpen && (
-          <EditTaskModal
-            onClose={closeEditTaskModal}
-            task={taskIndex !== undefined ? tasks[taskIndex] : defaultTask}
-          ></EditTaskModal>
-        )}
-        {isLoginModalOpen && (
-          <AskForLoginModal onClose={closeAskForLoginModal}></AskForLoginModal>
-        )}
-      </div>
-    </div>
-  );
+    );
   }
-
 }

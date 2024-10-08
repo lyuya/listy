@@ -1,4 +1,4 @@
-import { updateTheme } from "@/api/user.service";
+import { updateTheme } from "../../../../api/user.service";
 import styles from "./ColorPaletteModal.module.css";
 
 interface ColorPaletteModalProps {
