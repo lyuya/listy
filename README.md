@@ -32,6 +32,7 @@ The project is inspired by [Structured](https://structured.app/) and deployed us
 - **Styling:** Tailwind CSS
 
 - **State Management:** Redux
+- **Testing:** Vitest
 
 ## Screenshots
 
