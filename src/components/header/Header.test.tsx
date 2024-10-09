@@ -24,7 +24,7 @@ test("decrement one day on button click", () => {
       .mockImplementation(() => new Date(2001, 0, 1, 16, 0, 0).getTime()),
   }));
   const dateCalled = new Date(2000, 11, 31, 16, 0, 0);
-  expect(loadDateReducer).toBeCalledWith(dateCalled);
+  expect(loadDateReducer).toBeCalledWith(dateCalled.getTime());
 });
 
 test("increments one day on button click", () => {
@@ -37,7 +37,7 @@ test("increments one day on button click", () => {
       .fn()
       .mockImplementation(() => new Date(2001, 0, 1, 16, 0, 0).getTime()),
   }));
-  const dateCalled = new Date(2001, 0, 2, 16, 0, 0);
+  const dateCalled = new Date(2001, 0, 2, 16, 0, 0).getTime();
   expect(loadDateReducer).toBeCalledWith(dateCalled);
 });
 
