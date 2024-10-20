@@ -51,7 +51,7 @@ The project is inspired by [Structured](https://structured.app/) and deployed us
 ## Get started
 
 ```shell
-cd task-manager
+cd listy
 
 npm install
 
