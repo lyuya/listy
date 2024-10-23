@@ -60,7 +60,7 @@ export default function Header() {
   }, [isCalendarOpen, isSettingOpen, isColorPaletteOpen]);
 
   return (
-    <header>
+    <header className="sticky top-0 bg-white/80 z-10 backdrop-blur-md">
       <div className="inline-flex w-full justify-between lg:px-8 sm:p-5">
         <div className="text-2xl my-auto px-3">
           <button
