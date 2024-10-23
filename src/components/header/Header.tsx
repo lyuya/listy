@@ -61,7 +61,7 @@ export default function Header() {
 
   return (
     <header>
-      <div className="inline-flex w-full justify-between lg:px-8 md:px-4">
+      <div className="inline-flex w-full justify-between lg:px-8 sm:p-5">
         <div className="text-2xl my-auto px-3">
           <button
             id="minusOneDay"

@@ -141,7 +141,7 @@ export default function TaskList() {
                   ))}
                 </ul>
               </div>
-              <div>
+              <div className="mb-24 sm:mb-0">
                 <div className="rounded-lg bg-light	box-border h-130 w-500 py-3 px-4 my-3 mx-4">
                   <p className="font-semibold text-primary">Task Summary</p>
                   <ul className="text-primary text-sm font-medium">
