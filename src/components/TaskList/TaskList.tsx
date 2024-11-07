@@ -186,7 +186,7 @@ export default function TaskList() {
               </div>
             </div>
           </div>
-          <footer className="fixed bottom-10 right-4">
+          <div className="fixed bottom-10 right-4">
             <div className="px-8 float-right	">
               <button
                 className="bg-primary rounded-full text-white text-2xl py-2 px-4 text-2xl w-12 h-12 p-auto"
@@ -195,7 +195,7 @@ export default function TaskList() {
                 +
               </button>
             </div>
-          </footer>
+          </div>
         </div>
         <div>
           {isEditTaskOpen && (
