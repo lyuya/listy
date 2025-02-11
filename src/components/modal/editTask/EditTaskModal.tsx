@@ -210,6 +210,7 @@ export default function EditTaskModal({
     <>
       <div
         className="modal-backdrop dark overflow-auto"
+        tabIndex={-1}
         onClick={(e) => {
           e.stopPropagation();
           onClose();
@@ -228,7 +229,7 @@ export default function EditTaskModal({
             <span className="font-bold text-primary text-xl">
               {task.id ? "Edit task" : "New task"}
             </span>
-            <button className="modal-close" onClick={onClose}>
+            <button className="modal-close" onClick={onClose} aria-label="Close edit modal">
               &times;
             </button>
           </div>
@@ -312,7 +313,7 @@ export default function EditTaskModal({
               </>
             </div>
             <div className="px-2 text-sm">
-              <p>
+              <p aria-label="task duration">
                 {Math.floor((task.endTime - task.startTime) / 60000 / 60)} hours{" "}
                 {((task.endTime - task.startTime) / 60000) % 60} minutes
               </p>
@@ -320,7 +321,7 @@ export default function EditTaskModal({
             <div className="min-h-40 lg:grid lg:grid-cols-2 ">
               <div className="w-full">
                 <div className="w-full p-3 inline-flex justify-between">
-                  <span className="font-bold text-primary justify-center flex">
+                  <span className="font-bold text-primary justify-center flex" id="subtask">
                     Subtasks
                   </span>
                   &ensp;
@@ -355,6 +356,7 @@ export default function EditTaskModal({
                           <button
                             className="rounded-full text-primary hover:bg-light p-1 w-8"
                             onClick={() => deleteSubtask(i)}
+                            aria-label="delete subtask"
                           >
                             <DeleteOutlineIcon fontSize="small"></DeleteOutlineIcon>
                           </button>
@@ -382,6 +384,7 @@ export default function EditTaskModal({
                   <button
                     className="hover:bg-light rounded-full p-2"
                     onClick={setTaskChecked}
+                    aria-label={checked ? "uncheck task button" : "check task button"}
                   >
                     {checked && <TaskAltIcon></TaskAltIcon>}
                     {!checked && (
@@ -391,6 +394,7 @@ export default function EditTaskModal({
                   <button
                     className="hover:bg-light rounded-full p-2"
                     onClick={openDeleteConfirmationModal}
+                    aria-label="delete task button"
                   >
                     <DeleteOutlineIcon></DeleteOutlineIcon>
                   </button>
@@ -409,6 +413,7 @@ export default function EditTaskModal({
                     e.stopPropagation();
                     onClose();
                   }}
+                  aria-label="cancel task edition button"
                 >
                   cancel
                 </button>
@@ -418,6 +423,7 @@ export default function EditTaskModal({
                     e.stopPropagation();
                     saveNewTask(task);
                   }}
+                  aria-label="save task button"
                 >
                   save
                 </button>
